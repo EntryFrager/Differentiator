@@ -1,0 +1,193 @@
+--------------------------------------------------------------------------------------------------------
+tree[0086FED4] "tree" called from akin.cpp(45) game_run
+{
+	init_status = 1
+	{
+		*node[009AD008] = yellow;
+		*node[009AD158] = worn on a belt;
+		*node[009ACFF0] = judo belt;
+		*node[009AD020] = sun;
+		*node[009AD050] = alive;
+		*node[009AD038] = grey;
+		*node[009ACFC0] = mouse;
+		*node[009AD068] = tall;
+		*node[009AD080] = giraffe;
+		*node[009AD098] = frog;
+		*node[009AD0F8] = big;
+		*node[009AD0C8] = fly;
+		*node[009AD0E0] = rocket;
+		*node[009AD110] = house;
+		*node[009AD548] = thin;
+		*node[009AD4D0] = paper;
+		*node[009AD620] = grass;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[0086FEB4] "tree" called from akin.cpp(57) game_run
+{
+	init_status = 1
+	{
+		*node[011BD0B0] = yellow;
+		*node[011BD038] = worn on a belt;
+		*node[011BD140] = judo belt;
+		*node[011BCFD8] = sun;
+		*node[011BCF90] = alive;
+		*node[011BCFA8] = grey;
+		*node[011BD0E0] = mouse;
+		*node[011BD020] = tall;
+		*node[011BCFF0] = giraffe;
+		*node[011BD0F8] = frog;
+		*node[011BD050] = big;
+		*node[011BD0C8] = fly;
+		*node[011BD068] = rocket;
+		*node[011BD080] = house;
+		*node[011BD458] = thin;
+		*node[011BD3E0] = paper;
+		*node[011BD4A0] = grass;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[0086FEB4] "tree" called from akin.cpp(57) game_run
+{
+	init_status = 1
+	{
+		*node[00A7D068] = yellow;
+		*node[00A7D080] = worn on a belt;
+		*node[00A7CF90] = judo belt;
+		*node[00A7D098] = sun;
+		*node[00A7D0B0] = alive;
+		*node[00A7D020] = grey;
+		*node[00A7D0C8] = mouse;
+		*node[00A7D0E0] = tall;
+		*node[00A7CFA8] = giraffe;
+		*node[00A7D0F8] = frog;
+		*node[00A7D110] = big;
+		*node[00A7CFD8] = fly;
+		*node[00A7CFF0] = rocket;
+		*node[00A7D128] = house;
+		*node[00A7D650] = thin;
+		*node[00A7D638] = paper;
+		*node[00A7D488] = grass;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[0086FEB4] "tree" called from akin.cpp(57) game_run
+{
+	init_status = 1
+	{
+		*node[013CD020] = yellow;
+		*node[013CCF90] = worn on a belt;
+		*node[013CCFA8] = judo belt;
+		*node[013CD0B0] = sun;
+		*node[013CD0C8] = alive;
+		*node[013CD038] = grey;
+		*node[013CCFC0] = mouse;
+		*node[013CD140] = tall;
+		*node[013CD158] = giraffe;
+		*node[013CCFD8] = frog;
+		*node[013CD008] = big;
+		*node[013CD050] = fly;
+		*node[013CD068] = rocket;
+		*node[013CD080] = house;
+		*node[013CD6C8] = thin;
+		*node[013CD6F8] = paper;
+		*node[013CD6E0] = grass;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[0086FEB4] "tree" called from akin.cpp(58) game_run
+{
+	init_status = 1
+	{
+		*node[00A0CFD8] = yellow;
+		*node[00A0D050] = worn on a belt;
+		*node[00A0D0B0] = judo belt;
+		*node[00A0CFF0] = sun;
+		*node[00A0D158] = alive;
+		*node[00A0D080] = grey;
+		*node[00A0CFA8] = mouse;
+		*node[00A0D008] = tall;
+		*node[00A0D0C8] = giraffe;
+		*node[00A0D110] = frog;
+		*node[00A0D128] = big;
+		*node[00A0CF90] = fly;
+		*node[00A0D020] = rocket;
+		*node[00A0D038] = house;
+		*node[00A0D428] = thin;
+		*node[00A0D488] = paper;
+		*node[00A0D440] = grass;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[0086FEB4] "tree" called from akin.cpp(57) game_run
+{
+	init_status = 1
+	{
+		*node[0123D0F8] = yellow;
+		*node[0123D068] = worn on a belt;
+		*node[0123CFF0] = judo belt;
+		*node[0123D008] = sun;
+		*node[0123D020] = alive;
+		*node[0123D0E0] = grey;
+		*node[0123D080] = mouse;
+		*node[0123D098] = tall;
+		*node[0123D0C8] = giraffe;
+		*node[0123D110] = frog;
+		*node[0123D158] = big;
+		*node[0123CF90] = fly;
+		*node[0123CFC0] = rocket;
+		*node[0123D038] = house;
+		*node[0123D710] = thin;
+		*node[0123D6B0] = paper;
+		*node[0123D728] = grass;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[0086FEC0] "tree" called from akin.cpp(56) game_run
+{
+	init_status = 1
+	{
+		*node[0003D010] = yellow;
+		*node[0003D130] = worn on a belt;
+		*node[0003D1C0] = judo belt;
+		*node[0003D190] = sun;
+		*node[0003D0E8] = alive;
+		*node[0003D070] = grey;
+		*node[0003D040] = mouse;
+		*node[0003D160] = tall;
+		*node[0003D100] = giraffe;
+		*node[0003D1A8] = frog;
+		*node[0003D028] = big;
+		*node[0003D058] = fly;
+		*node[0003D088] = rocket;
+		*node[0003D0A0] = drive;
+		*node[0003D640] = car;
+		*node[0003D430] = house;
+		*node[0003D520] = thin;
+		*node[0003D550] = paper;
+		*node[0003D568] = drink;
+		*node[0003D598] = cup;
+		*node[0003D658] = grass;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
