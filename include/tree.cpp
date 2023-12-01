@@ -89,35 +89,54 @@ NODE *split_node (TREE *tree, NODE *node, NODE *parent)
     {
         node->left = split_node (tree, node->left, node);
     }
-    else if (strncmp (tree->info.buf, "nil", 3) == 0)
+    else
     {
-        tree->info.buf += 3;
+        tree->info.buf++;
     }
 
-    while (*(tree->info.buf++) != '\"')
-    {
-    }
+    read_str (tree, node);
 
-    node->value = tree->info.buf;
-    
-    while (*(tree->info.buf++) != '\"')
-    {
-    }
-    
-    *(tree->info.buf - 1) = '\0';
+    char temp_val = *tree->info.buf;
+    *tree->info.buf = '\0';
 
-    if (*(++tree->info.buf) == '(')
+    if (temp_val == '(')
     {
         node->right = split_node (tree, node->right, node);
     }
-    else if (strncmp (tree->info.buf, "nil", 3) == 0)
+    else
     {
-        tree->info.buf += 3;
+        tree->info.buf++;
     }
 
     tree->info.buf++;
 
     return node;
+}
+
+void read_str (TREE *tree, NODE *node)
+{
+    my_assert (tree != NULL);
+    my_assert (node != NULL);
+
+    if (isdigit (*tree->info.buf) == 0)
+    {
+        node->type = NUM;
+    }
+    else if (*tree->info.buf == 'x')
+    {
+        node->type = VAR;
+    }
+    else
+    {
+        node->type = OPERATOR;
+    }
+
+    node->value = tree->info.buf;
+
+    while (((*tree->info.buf) != '_') && ((*tree->info.buf) != '(')) 
+    {
+        tree->info.buf++;
+    }
 }
 
 int add_node (NODE *node, const char *value, const bool side)
@@ -167,13 +186,29 @@ int delete_node (NODE *node)
     return ERR_NO;
 }
 
+NODE *copy_tree (NODE *node, NODE *parent)
+{
+    if (!node)
+    {
+        return NULL;
+    }
+
+    NODE *copy_node  = create_node (node->value, NULL, NULL, parent);
+
+    copy_node->left  = copy_tree (node->left, copy_node);
+
+    copy_node->right = copy_tree (node->right, copy_node);
+
+    return copy_node;
+}
+
 int print_tree (NODE *node, FILE *stream)
 {
     my_assert (stream != NULL);
 
     if (!node)
     {
-        fprintf (stream, "nil");
+        fprintf (stream, "_");
         return ERR_NO;
     }
 
@@ -181,7 +216,7 @@ int print_tree (NODE *node, FILE *stream)
 
     print_tree (node->left, stream);
 
-    fprintf (stream, " \"%s\" ", node->value);
+    fprintf (stream, "%s", node->value);
 
     print_tree (node->right, stream);
 

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <TXLib.h>
 
 #include "error.h"
 #include "utils.h"
@@ -48,7 +49,7 @@ const bool INIT_NOT = false;
 
 const int NUM = 0;
 const int VAR = 1;
-const int proc = 2;
+const int OPERATOR = 2;
 
 typedef struct NODE{
     NODE *left   = NULL;
@@ -93,9 +94,13 @@ int input_base (TREE *tree);
 
 NODE *split_node (TREE *tree, NODE *node, NODE *parent);
 
+void read_str (TREE *tree, NODE *node);
+
 int add_node (NODE *node, const char *value, const bool side);
 
 int delete_node (NODE *node);
+
+NODE *copy_tree (NODE *node, NODE *parent);
 
 int print_tree (NODE *node, FILE *stream);
 

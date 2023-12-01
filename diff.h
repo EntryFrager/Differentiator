@@ -5,4 +5,6 @@
 #include "include/tree.h"
 #include "include/error.h"
 
+NODE *diff (const NODE *node);
+
 #endif

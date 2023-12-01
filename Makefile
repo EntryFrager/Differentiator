@@ -9,7 +9,7 @@ CFLAGS = -c -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-
 	
 INCLUDES = diff.h tree.h error.h utils.h
 
-SOURCES = main.cpp diff.c error.cpp tree.cpp utils.cpp
+SOURCES = main.cpp diff.cpp error.cpp tree.cpp utils.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
