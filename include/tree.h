@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include <TXLib.h>
+//#include <TXLib.h>
 
 #include "error.h"
 #include "utils.h"
@@ -18,28 +18,45 @@
 
 #define FONTNAME "\"Times-New-Roman\""
 
-#define DEBUG
+#define DEBUG_TREE
 
-#ifdef DEBUG
-    #define CALL_DUMP(tree, code_error)                                         \
+#ifdef DEBUG_TREE
+    #define TREE_LOG(tree, code_error)                                          \
     {                                                                           \
         tree_dump_text (tree, code_error, __FILE__, __func__, __LINE__);        \
         tree_dump_graph_viz (tree, __FILE__, __func__, __LINE__);               \
     }
 
-    #define assert_tree(tree)                                                                   \
-    {                                                                                           \
-        int code_error = 0;                                                                     \
-        if ((code_error = (tree_verificator (tree) | node_verificator (tree->root))) != ERR_NO) \
-        {                                                                                       \
-            CALL_DUMP(tree, code_error)                                                         \
-            return code_error;                                                                  \
-        }                                                                                       \
+    #define assert_tree(tree, ret_value)                                                            \
+    {                                                                                               \
+        if ((*code_error |= (tree_verificator (tree) | node_verificator (tree->root))) != ERR_NO)   \
+        {                                                                                           \
+            TREE_LOG (tree, *code_error)                                                            \
+            return ret_value;                                                                       \
+        }                                                                                           \
     }
 #else
     #define CALL_DUMP(...)
     #define assert_tree(...)
 #endif
+
+enum op_command {
+    ADD,
+    SUB,
+    MUL,
+    DIV,
+    DEG,
+    SIN,
+    COS,
+    SQRT,
+};
+
+enum types {
+    DEF_TYPE,
+    NUM,
+    OP,
+    VAR
+};
 
 const bool LEFT  = false;
 const bool RIGHT = true;
@@ -47,17 +64,20 @@ const bool RIGHT = true;
 const bool INIT = true;
 const bool INIT_NOT = false;
 
-const int NUM = 0;
-const int VAR = 1;
-const int OPERATOR = 2;
+typedef double ELEMENT;
 
-typedef struct NODE{
+union DATA {
+    char *var = NULL;
+    ELEMENT value;
+};
+
+typedef struct NODE {
     NODE *left   = NULL;
     NODE *right  = NULL;
     NODE *parent = NULL;
 
     int type = 0;
-    const char *value = NULL;
+    DATA *data = NULL;
 } NODE;
 
 typedef struct {
@@ -86,25 +106,25 @@ typedef struct {
     INFO info = {};
 } TREE;
 
-int create_tree (TREE *tree, const char *value);
+int create_tree (TREE *tree, DATA *data, int *code_error);
 
-NODE *create_node (const char *value, NODE *left, NODE *right, NODE *parent);
+NODE *create_node (ELEMENT value, char *var, int type, NODE *left, NODE *right, NODE *parent, int *code_error);
 
-int input_base (TREE *tree);
+int input_base (TREE *tree, int *code_error);
 
-NODE *split_node (TREE *tree, NODE *node, NODE *parent);
+NODE *split_node (TREE *tree, NODE *node, NODE *parent, int *code_error);
 
-void read_str (TREE *tree, NODE *node);
+void read_str (TREE *tree, NODE *node, int *code_error);
 
-int add_node (NODE *node, const char *value, const bool side);
+int add_node (NODE *node, ELEMENT value, char *var, int type, const bool side, int *code_error);
 
-int delete_node (NODE *node);
+int delete_node (NODE *node, int *code_error);
 
-NODE *copy_tree (NODE *node, NODE *parent);
+NODE *copy_tree (NODE *node, NODE *parent, int *code_error);
 
-int print_tree (NODE *node, FILE *stream);
+int print_tree (NODE *node, FILE *stream, int *code_error);
 
-int destroy_tree (TREE *tree);
+int destroy_tree (TREE *tree, int *code_error);
 
 #ifdef DEBUG
     int tree_verificator (TREE *tree);
@@ -118,9 +138,9 @@ int destroy_tree (TREE *tree);
     void tree_dump_graph_viz (TREE *tree, const char *file_err, 
                               const char *func_err, const int line_err);
 
-    int create_node (NODE *node, FILE *stream, int ip_parent, int ip, char *color);
+    int create_node_dot (NODE *node, FILE *stream, int ip_parent, int ip, char *color);
 
-    void tree_dump_html (TREE *tree);
+    void tree_dump_html (TREE *tree, int *code_error);
 #endif
 
 #endif //TREE_H
