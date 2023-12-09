@@ -3,14 +3,17 @@
 
 #include <math.h>
 
+#include "input.h"
 #include "include/tree.h"
-#include "include/utils.h"
-#include "include/error.h"
+
+NODE *n_diff (NODE *node, size_t n, int *code_error);
 
 NODE *diff (NODE *node, int *code_error);
 
-NODE *set_parent (NODE *node, NODE *parent);
+NODE *tree_simplific (NODE *node, int *code_error);
 
-NODE *simpl_tree (NODE *node, int *code_error);
+NODE *hanging_tree (NODE *node, NODE *turn_off_node, NODE *parent, int *code_error);
+
+ELEMENT eval_node (int op, ELEMENT first_value, ELEMENT second_value, int *code_error);
 
 #endif //DIFF_H

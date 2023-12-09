@@ -4,9 +4,12 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 
 #include "error.h"
+
+#define compare(first_value, second_value) compare_number (first_value, second_value, code_error)
 
 #define FOPEN_(fp, fp_name, mode)               \
     FILE *fp = fopen (fp_name, mode);           \
@@ -25,7 +28,7 @@ char *skip_isspace (char *str, int *code_error);
 
 bool is_zero (const double value, int *code_error);
 
-bool compare_number (const double value_1, const double value_2, int *code_error);
+int compare_number (const double value_1, const double value_2, int *code_error);
 
 void clean_buffer ();
 

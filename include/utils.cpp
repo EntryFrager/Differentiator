@@ -44,27 +44,30 @@ char *get_str (FILE *stream, int *code_error)
     return str;
 }
 
-char *skip_spaces (char *str, int *code_error)
+char *skip_isspace (char *str, int *code_error)
 {
     my_assert (str != NULL, ERR_PTR);
 
-    size_t len = sizeof (str);
-    size_t count_space = 0;
+    size_t len = strlen (str);
+    char *new_str = (char *) calloc (len, sizeof (char));
+    my_assert (new_str != NULL, ERR_MEM);
+
+    size_t pos = 0;
 
     for (size_t i = 0; i < len; i++)
     {
-        if (str[i] == ' ')
+        if (!isspace (str[i]))
         {
-            count_space = 0;
-
-            if (i + count_space < len)
-            {
-                str[i] = str[i + count_space];
-            }
+            new_str[pos++] = str[i];
         }
     }
 
-    return str;
+    new_str = (char *) realloc (new_str, (pos + 1) * sizeof (char));
+    my_assert (new_str != NULL, ERR_MEM);
+
+    new_str[pos] = '\0';
+
+    return new_str;
 }
 
 bool is_zero (const double value, int *code_error)
@@ -74,13 +77,22 @@ bool is_zero (const double value, int *code_error)
     return (fabs (value) < EPSILON);
 }
 
-bool compare_number (const double value_1, const double value_2, int *code_error)
+int compare_number (const double value_1, const double value_2, int *code_error)
 {
     my_assert (isfinite (value_1), ERR_NAN);
 
     my_assert (isfinite (value_2), ERR_NAN);
 
-    return ((value_1 - value_2) > EPSILON);
+    if ((value_1 - value_2) > EPSILON)
+    {
+        return 1;
+    }
+    else if ((value_1 - value_2) < (-1) * EPSILON)
+    {
+        return -1;
+    }
+
+    return 0;
 }
 
 void clean_buffer ()

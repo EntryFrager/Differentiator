@@ -1,80 +1,70 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "input.h"
 
-#include "include/tree.h"
-
-size_t p = 0;
-
-#define syntax_assert(expr) if (!expr) {printf ("SYNTAX ERROR: expected \"" #expr "\""); abort();}
-
-NODE *get_g (const char *str, int *code_error);
-NODE *get_e (const char *str, int *code_error);
-NODE *get_t (const char *str, int *code_error);
-NODE *get_p (const char *str, int *code_error);
-NODE *get_n (const char *str, int *code_error);
-
-int input_base (TREE *tree, int *code_error)
+int input_expr (TREE *tree, int *code_error)
 {
     my_assert (tree != NULL, ERR_PTR);
 
-    tree->info.fp_base = fopen (tree->info.fp_name_base, "r + b");
-    my_assert (tree->info.fp_base != NULL, ERR_FOPEN);
+    tree->info.fp_expr = fopen (tree->info.fp_name_expr, "r + b");
+    my_assert (tree->info.fp_expr != NULL, ERR_FOPEN);
 
-    CHECK_ERROR_RETURN (tree->info.size_file = get_file_size (tree->info.fp_base, code_error), *code_error);
+    CHECK_ERROR_RETURN (tree->info.size_file = get_file_size (tree->info.fp_expr, code_error), *code_error);
 
     tree->info.buf = (char *) calloc (tree->info.size_file + 1, sizeof (char));
     my_assert (tree->info.buf != NULL, ERR_MEM);
 
-    size_t read_size = fread (tree->info.buf, sizeof (char), tree->info.size_file, tree->info.fp_base);
+    size_t read_size = fread (tree->info.buf, sizeof (char), tree->info.size_file, tree->info.fp_expr);
     my_assert (read_size == tree->info.size_file, ERR_FREAD);
 
     *(tree->info.buf + tree->info.size_file) = '\0';
 
-    FCLOSE_ (tree->info.fp_base);
+    FCLOSE_ (tree->info.fp_expr);
 
-    tree->root = get_g (tree->info.buf, code_error);
+    tree->info.buf = skip_isspace (tree->info.buf, code_error);
+
+    tree->root = get_g (&tree->info.buf, code_error);
+
+    tree->root = set_parent (tree->root, NULL);
 
     assert_tree (tree, ERR_TREE);
 
     return ERR_NO;
 }
 
-NODE *get_g (const char *str, int *code_error)
+NODE *get_g (char **str, int *code_error)
 {
     my_assert (str != NULL, ERR_PTR);
 
-    const char *s = str;
-    p = 0;
+    CHECK_ERROR_RETURN (NODE *node = get_e (str, code_error), NULL);
 
-    NODE *node = get_e (str, code_error);
-
-    syntax_assert (s[p] == '\0');
+    //syntax_assert (**str == '\0');
 
     return node;
 }
 
-NODE *get_e (const char *str, int *code_error)
+NODE *get_e (char **str, int *code_error)
 {
     my_assert (str != NULL, ERR_PTR);
+    
+    CHECK_ERROR_RETURN (NODE *node = get_t (str, code_error), NULL);
 
-    NODE *node = get_t (str, code_error);
-
-    while (str[p] == '+' || str[p] == '-')
+    while (**str == '+' || **str == '-')
     {
-        char op = str[p];
-        p++;
-        NODE *node_temp = get_t (str, code_error);
+        char op = **str;
+        (*str)++;
+        CHECK_ERROR_RETURN (NODE *node_r = get_t (str, code_error), NULL);
+        CHECK_ERROR_RETURN (NODE *node_l = copy_tree (node, NULL, code_error), NULL);
+        CHECK_ERROR_RETURN (delete_node (node, code_error), NULL);
 
         switch (op)
         {
             case ('+'):
             {
-                node = create_node (ADD, NULL, OP, node, node_temp, NULL, code_error);
+                CHECK_ERROR_RETURN (node = create_node_op (ADD, node_l, node_r, NULL, code_error), NULL);
                 break;
             }
             case ('-'):
             {
-                node = create_node (ADD, NULL, OP, node, node_temp, NULL, code_error);
+                CHECK_ERROR_RETURN (node = create_node_op (SUB, node_l, node_r, NULL, code_error), NULL);
                 break;
             }
             default:
@@ -87,29 +77,30 @@ NODE *get_e (const char *str, int *code_error)
     return node;
 }
 
-NODE *get_t (const char *str, int *code_error)
+NODE *get_t (char **str, int *code_error)
 {
     my_assert (str != NULL, ERR_PTR);
 
-    NODE *node = get_p (str, code_error);
+    CHECK_ERROR_RETURN (NODE *node = get_d (str, code_error), NULL);
 
-    while (str[p] == '*' || str[p] == '/')
+    while (**str == '*' || **str == '/')
     {
-        char op = str[p];
-        p++;
-        NODE *node_temp = get_p (str, code_error);
+        char op = **str;
+        (*str)++;
+        CHECK_ERROR_RETURN (NODE *node_r = get_d (str, code_error), NULL);
+        CHECK_ERROR_RETURN (NODE *node_l = copy_tree (node, NULL, code_error), NULL);
+        CHECK_ERROR_RETURN (delete_node (node, code_error), NULL);
 
         switch (op)
         {
             case ('*'):
             {
-                node = create_node (MUL, NULL, OP, node, node_temp, NULL, code_error);
+                CHECK_ERROR_RETURN (node = create_node_op (MUL, node_l, node_r, NULL, code_error), NULL);
                 break;
             }
             case ('/'):
             {
-                syntax_assert (node_temp->data->value != 0);
-                node = create_node (MUL, NULL, OP, node, node_temp, NULL, code_error);
+                CHECK_ERROR_RETURN (node = create_node_op (DIV, node_l, node_r, NULL, code_error), NULL);
                 break;
             }
             default:
@@ -122,21 +113,122 @@ NODE *get_t (const char *str, int *code_error)
     return node;
 }
 
-NODE *get_p (const char *str, int *code_error)
+NODE *get_d (char **str, int *code_error)
 {
     my_assert (str != NULL, ERR_PTR);
 
-    if (str[p] == '(')
+    CHECK_ERROR_RETURN (NODE *node = get_p (str, code_error), NULL);
+
+    while (**str == '^')
     {
-        p++;
+        (*str)++;
 
-        NODE *node = get_e (str, code_error);
+        CHECK_ERROR_RETURN (NODE *node_r = get_p (str, code_error), NULL);
+        CHECK_ERROR_RETURN (NODE *node_l = copy_tree (node, NULL, code_error), NULL);
+        CHECK_ERROR_RETURN (delete_node (node, code_error), NULL);
 
-        syntax_assert (str[p] == ')');
+        CHECK_ERROR_RETURN (node = create_node_op (DEG, node_l, node_r, NULL, code_error), NULL);
+    }
 
-        p++;
+    return node;
+}
+
+NODE *get_p (char **str, int *code_error)
+{
+    my_assert (str != NULL, ERR_PTR);
+
+    if (**str == '(')
+    {
+        (*str)++;
+
+        CHECK_ERROR_RETURN (NODE *node = get_e (str, code_error), NULL);
+
+        syntax_assert (**str == ')');
+
+        (*str)++;
 
         return node;
+    }
+    else
+    {
+        return get_trig (str, code_error);
+    }
+}
+
+NODE *get_trig (char **str, int *code_error)
+{
+    my_assert (str != NULL, ERR_PTR);
+    
+    CHECK_ERROR_RETURN (op_command op = is_trig (str, code_error), NULL);
+
+    if (op != OP_NO)
+    {
+        CHECK_ERROR_RETURN (NODE *node_r = get_p (str, code_error), NULL);
+        
+        switch (op)
+        {
+            case (SIN):
+            {
+                return create_node_op (SIN, NULL, node_r, NULL, code_error);
+            }
+            case (COS):
+            {
+                return create_node_op (COS, NULL, node_r, NULL, code_error);
+            }
+            case (SQRT):
+            {
+                return create_node_op (SQRT, NULL, node_r, NULL, code_error);
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+    else
+    {
+        return get_var (str, code_error);
+    }
+
+    return NULL;
+}
+
+op_command is_trig (char **str, int *code_error)
+{
+    my_assert (str != NULL, ERR_PTR);
+
+    if (strncmp (*str, "sin", 3) == 0)
+    {
+        *str += 3;
+
+        return SIN;
+    }
+    else if (strncmp (*str, "cos", 3) == 0)
+    {
+        *str += 3;
+
+        return COS;
+    }
+    else if (strncmp (*str, "sqrt", 4) == 0)
+    {
+        *str += 4;
+
+        return SQRT;
+    }
+
+    return OP_NO;
+}
+
+NODE *get_var (char **str, int *code_error)
+{
+    my_assert (str != NULL, ERR_PTR);
+
+    if (isalpha (**str))
+    {
+        char var = **str;
+        (*str)++;
+
+        return create_node_var (var, NULL, NULL, NULL, code_error);
     }
     else
     {
@@ -144,39 +236,16 @@ NODE *get_p (const char *str, int *code_error)
     }
 }
 
-NODE get_trig (const char *str, int *code_error)
+NODE *get_n (char **str, int *code_error)
 {
     my_assert (str != NULL, ERR_PTR);
 
-    if (strncmp (str, "sin", 3) == 0)
-    {
-        str += 3;  
-    }
-    else if (strncmp (str, "cos", 3) == 0)
-    {
-        str += 3;
-    }
-    else if (strncmp (str, "tg", 2) == 0)
-    {
-        str += 2;
-    }
-    else if (strncmp (str, "ctg", 3) == 0)
-    {
-        str += 3;
-    }
-}
+    double value = 0;
+    int n_read = 0;
 
-NODE *get_n (const char *str, int *code_error)
-{
-    my_assert (str != NULL, ERR_PTR);
+    sscanf (*str, "%lf%n", &value, &n_read);
 
-    int value = 0;
+    *str += n_read; 
 
-    while ('0' <= str[p] && str[p] <= '9')
-    {
-        value = value * 10 + str[p] - '0';
-        p++;
-    }
-
-    return create_node (value, NULL, NUM, NULL, NULL, NULL, code_error);
+    return create_node_num (value, NULL, NULL, NULL, code_error);
 }

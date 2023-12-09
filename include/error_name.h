@@ -13,6 +13,10 @@ DEF_ERR ("an error occurred while closing the file")
 
 DEF_ERR ("an error occurred while reading text from the file")
 
+DEF_ERR ("division by zero")
+
+DEF_ERR ("root of a negative number")
+
 DEF_ERR ("there was an error in the tree")
 
 DEF_ERR ("pointer to tree structure null")

@@ -5,11 +5,13 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-//#include <TXLib.h>
+#include <TXLib.h>
 
+#include "dsl.h"
 #include "error.h"
 #include "utils.h"
 
+#define BLACK_COLOR "\"#000000\""
 #define BLUE_COLOR "\"#00BFFF\""
 #define PURPLE_COLOR "\"#8B00FF\""
 #define RED_COLOR "\"#ff0000\""
@@ -41,6 +43,7 @@
 #endif
 
 enum op_command {
+    OP_NO = -1,
     ADD,
     SUB,
     MUL,
@@ -49,6 +52,8 @@ enum op_command {
     SIN,
     COS,
     SQRT,
+    OPEN_BRACKET,
+    CLOSE_BRACKET
 };
 
 enum types {
@@ -62,13 +67,14 @@ const bool LEFT  = false;
 const bool RIGHT = true;
 
 const bool INIT = true;
-const bool INIT_NOT = false;
+const bool INIT_NO = false;
 
 typedef double ELEMENT;
 
 union DATA {
-    char *var = NULL;
     ELEMENT value;
+    op_command types_op;
+    char var;
 };
 
 typedef struct NODE {
@@ -77,12 +83,12 @@ typedef struct NODE {
     NODE *parent = NULL;
 
     int type = 0;
-    DATA *data = NULL;
+    DATA data = {};
 } NODE;
 
 typedef struct {
-    char *fp_name_base = NULL;
-    FILE *fp_base      = NULL;
+    char *fp_name_expr = NULL;
+    FILE *fp_expr      = NULL;
 
     size_t size_file = 0;
 
@@ -106,17 +112,17 @@ typedef struct {
     INFO info = {};
 } TREE;
 
-int create_tree (TREE *tree, DATA *data, int *code_error);
+int create_tree (TREE *tree, int *code_error);
 
-NODE *create_node (ELEMENT value, char *var, int type, NODE *left, NODE *right, NODE *parent, int *code_error);
+NODE *create_node_num (ELEMENT value, NODE *left, NODE *right, NODE *parent, int *code_error);
 
-int input_base (TREE *tree, int *code_error);
+NODE *create_node_op (op_command types_op, NODE *left, NODE *right, NODE *parent, int *code_error);
 
-NODE *split_node (TREE *tree, NODE *node, NODE *parent, int *code_error);
+NODE *create_node_var (char var, NODE *left, NODE *right, NODE *parent, int *code_error);
 
-void read_str (TREE *tree, NODE *node, int *code_error);
+int add_node (NODE *node, ELEMENT value, char var, op_command types_op, int type, const bool side, int *code_error);
 
-int add_node (NODE *node, ELEMENT value, char *var, int type, const bool side, int *code_error);
+NODE *set_parent (NODE *node, NODE *parent);
 
 int delete_node (NODE *node, int *code_error);
 
@@ -137,8 +143,6 @@ int destroy_tree (TREE *tree, int *code_error);
 
     void tree_dump_graph_viz (TREE *tree, const char *file_err, 
                               const char *func_err, const int line_err);
-
-    int create_node_dot (NODE *node, FILE *stream, int ip_parent, int ip, char *color);
 
     void tree_dump_html (TREE *tree, int *code_error);
 #endif

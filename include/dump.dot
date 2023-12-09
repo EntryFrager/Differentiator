@@ -1,34 +1,50 @@
 digraph List {
 	rankdir = HR;
 	bgcolor = "#696969";
-	node0 [shape = Mrecord, style = filled, fillcolor = "#ff0000", label = "{+}"];
-	node1 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{*}"];
-	node0 -> node1 [color = "#00BFFF"]
-	node2 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{+}"];
-	node1 -> node2 [color = "#00BFFF"]
-	node3 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{1.000000}"];
-	node2 -> node3 [color = "#00BFFF"]
-	node4 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{0.000000}"];
-	node2 -> node4 [color = "#ccff99"]
-	node5 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{-}"];
-	node1 -> node5 [color = "#ccff99"]
+	node0 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{*}"];
+	node1 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{*}"];
+	node0 -> node1 [color = "#8B00FF"];
+	node2 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{2.000000}"];
+	node1 -> node2 [color = "#00BFFF"];
+	node3 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{^}"];
+	node1 -> node3 [color = "#8B00FF"];
+	node4 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{sin}"];
+	node3 -> node4 [color = "#8B00FF"];
+	node5 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{*}"];
+	node4 -> node5 [color = "#8B00FF"];
 	node6 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{3.000000}"];
-	node5 -> node6 [color = "#00BFFF"]
-	node7 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{4.000000}"];
-	node5 -> node7 [color = "#ccff99"]
-	node8 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{*}"];
-	node0 -> node8 [color = "#ccff99"]
-	node9 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{+}"];
-	node8 -> node9 [color = "#00BFFF"]
-	node10 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{x}"];
-	node9 -> node10 [color = "#00BFFF"]
-	node11 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{2.000000}"];
-	node9 -> node11 [color = "#ccff99"]
-	node12 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{-}"];
-	node8 -> node12 [color = "#ccff99"]
-	node13 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{0.000000}"];
-	node12 -> node13 [color = "#00BFFF"]
-	node14 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{0.000000}"];
-	node12 -> node14 [color = "#ccff99"]
+	node5 -> node6 [color = "#00BFFF"];
+	node7 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{x}"];
+	node5 -> node7 [color = "#ccff99"];
+	node8 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{-}"];
+	node3 -> node8 [color = "#8B00FF"];
+	node9 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{2.000000}"];
+	node8 -> node9 [color = "#00BFFF"];
+	node10 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{1.000000}"];
+	node8 -> node10 [color = "#00BFFF"];
+	node11 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{*}"];
+	node0 -> node11 [color = "#8B00FF"];
+	node12 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{cos}"];
+	node11 -> node12 [color = "#8B00FF"];
+	node13 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{*}"];
+	node12 -> node13 [color = "#8B00FF"];
+	node14 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{3.000000}"];
+	node13 -> node14 [color = "#00BFFF"];
+	node15 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{x}"];
+	node13 -> node15 [color = "#ccff99"];
+	node16 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{+}"];
+	node11 -> node16 [color = "#8B00FF"];
+	node17 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{*}"];
+	node16 -> node17 [color = "#8B00FF"];
+	node18 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{0.000000}"];
+	node17 -> node18 [color = "#00BFFF"];
+	node19 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{x}"];
+	node17 -> node19 [color = "#ccff99"];
+	node20 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{*}"];
+	node16 -> node20 [color = "#8B00FF"];
+	node21 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{3.000000}"];
+	node20 -> node21 [color = "#00BFFF"];
+	node22 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{1.000000}"];
+	node20 -> node22 [color = "#00BFFF"];
 	label = "tree_dump from function main, Tree/main.cpp:22";}
 
