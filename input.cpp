@@ -36,7 +36,7 @@ NODE *get_g (char **str, int *code_error)
 
     CHECK_ERROR_RETURN (NODE *node = get_e (str, code_error), NULL);
 
-    //syntax_assert (**str == '\0');
+    syntax_assert (**str == '\0');
 
     return node;
 }
@@ -169,15 +169,19 @@ NODE *get_trig (char **str, int *code_error)
         {
             case (SIN):
             {
-                return create_node_op (SIN, NULL, node_r, NULL, code_error);
+                return create_node_op (SIN, NUM_(1, NULL), node_r, NULL, code_error);
             }
             case (COS):
             {
-                return create_node_op (COS, NULL, node_r, NULL, code_error);
+                return create_node_op (COS, NUM_(1, NULL), node_r, NULL, code_error);
             }
             case (SQRT):
             {
-                return create_node_op (SQRT, NULL, node_r, NULL, code_error);
+                return create_node_op (SQRT, NUM_(1, NULL), node_r, NULL, code_error);
+            }
+            case (LN):
+            {
+                return create_node_op (LN, NUM_(1, NULL), node_r, NULL, code_error);
             }
             default:
             {
@@ -197,25 +201,31 @@ op_command is_trig (char **str, int *code_error)
 {
     my_assert (str != NULL, ERR_PTR);
 
-    if (strncmp (*str, "sin", 3) == 0)
+    if (strncmp (*str, "sin", sizeof ("sin") - 1) == 0)
     {
-        *str += 3;
+        *str += sizeof ("sin") - 1;
 
         return SIN;
     }
-    else if (strncmp (*str, "cos", 3) == 0)
+    else if (strncmp (*str, "cos", sizeof ("cos") - 1) == 0)
     {
-        *str += 3;
+        *str += sizeof ("cos") - 1;
 
         return COS;
     }
-    else if (strncmp (*str, "sqrt", 4) == 0)
+    else if (strncmp (*str, "sqrt", sizeof ("sqrt") - 1) == 0)
     {
-        *str += 4;
+        *str += sizeof ("sqrt") - 1;
 
         return SQRT;
     }
+    else if (strncmp (*str, "ln", sizeof ("ln") - 1) == 0)
+    {
+        *str += sizeof ("ln") - 1;
 
+        return LN;
+    }
+ 
     return OP_NO;
 }
 

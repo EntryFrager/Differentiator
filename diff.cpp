@@ -16,57 +16,57 @@ NODE *n_diff (NODE *node, size_t n, int *code_error)
 
 NODE *diff (NODE *node, int *code_error)
 {
-    if (node->type == NUM)
-    {
-        return NUM_(0, NULL);
-    }
-    else if (node->type == VAR)
-    {
-        return NUM_(1, NULL);
-    }
-    
-    switch (node->data.types_op)
-    {
-        case (ADD):
-        {
-            return ADD_(DIF_L,
-                        DIF_R);
-        }
-        case (SUB):
-        {
-            return SUB_(DIF_L,
-                        DIF_R);
-        }
-        case (MUL):
-        {
-            return ADD_(MUL_(DIF_L, COPY_R), MUL_(COPY_L, DIF_R));
-        }
-        case (DIV):
-        {
-            return DIV_(SUB_(MUL_(DIF_L, COPY_R), MUL_(COPY_L, DIF_R)), MUL_(COPY_R, COPY_R));
-        }
-        case (DEG):
-        {
-            return MUL_(MUL_(COPY_R, DEG_(COPY_L, SUB_(COPY_R, NUM_(1, NULL)))), DIF_L);
-        }
-        case (SIN):
-        {
-            return MUL_(COS_(COPY_R), DIF_R);
-        }
-        case (COS):
-        {
-            return MUL_(SIN_(COPY_R), MUL_(NUM_(-1, NULL), DIF_R));
-        }
-        case (SQRT):
-        {
-            return MUL_(MUL_(NUM_(0.5, NULL), DEG_(COPY_R, NUM_(-0.5, NULL))), DIF_R);
-        }
-        default:
-        {
-            printf ("sosi xyi;)");
-            break;
-        }
-    }
+    CHECK_TYPE (node->type,
+                {return NUM_(1, NULL);},
+                {return NUM_(0, NULL);},
+                {switch (node->data.types_op)
+                {
+                    case (ADD):
+                    {
+                        return ADD_(DIF_L, DIF_R);
+                    }
+                    case (SUB):
+                    {
+                        return SUB_(DIF_L, DIF_R);
+                    }
+                    case (MUL):
+                    {
+                        return ADD_(MUL_(DIF_L, COPY_R), MUL_(COPY_L, DIF_R));
+                    }
+                    case (DIV):
+                    {
+                        return DIV_(SUB_(MUL_(DIF_L, COPY_R), MUL_(COPY_L, DIF_R)), MUL_(COPY_R, COPY_R));
+                    }
+                    case (DEG):
+                    {
+                        if (L_TYPE == NUM && R_TYPE == VAR)
+                        {
+                            return MUL_(LN_(COPY_L), MUL_(DEG_(COPY_L, COPY_R), DIF_R));
+                        }
+
+                        return MUL_(MUL_(COPY_R, DEG_(COPY_L, SUB_(COPY_R, NUM_(1, NULL)))), DIF_L);
+                    }
+                    case (SIN):
+                    {
+                        return MUL_(COS_(COPY_R), DIF_R);
+                    }
+                    case (COS):
+                    {
+                        return MUL_(SIN_(COPY_R), MUL_(NUM_(-1, NULL), DIF_R));
+                    }
+                    case (SQRT):
+                    {
+                        return MUL_(MUL_(NUM_(0.5, NULL), DEG_(COPY_R, NUM_(-0.5, NULL))), DIF_R);
+                    }
+                    case (LN):
+                    {
+                        return MUL_(DIV_(NUM_(1, NULL), COPY_R), DIF_R);
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }})
 
     return node;
 }
@@ -83,7 +83,7 @@ NODE *tree_simplific (NODE *node, int *code_error)
     node->left  = tree_simplific (node->left, code_error);
     node->right = tree_simplific (node->right, code_error);
 
-    if (node->type == OP && node->data.types_op != SIN && 
+    if (node->type == OP && node->data.types_op != SIN &&
         node->data.types_op != COS && node->data.types_op != SQRT)
     {
         if (L_TYPE == NUM && R_TYPE == NUM)
@@ -161,7 +161,6 @@ NODE *tree_simplific (NODE *node, int *code_error)
                 }
                 default:
                 {
-                    printf (";)\n");
                     break;
                 }
             }
@@ -239,26 +238,36 @@ ELEMENT eval_node (int op, ELEMENT first_value, ELEMENT second_value, int *code_
         }
         case (SIN):
         {
-            return sin (first_value);
+            return sin (second_value);
         }
         case (COS):
         {
-            return cos (first_value);
+            return cos (second_value);
         }
         case (SQRT):
         {
-            if (first_value >= 0)
+            if (second_value >= 0)
             {
-                return pow (first_value, 0.5);
+                return pow (second_value, 0.5);
             }
             else
             {
                 *code_error |= ERR_SQRT_NEGAT;
             }
         }
+        case (LN):
+        {
+            if (second_value > 0)
+            {
+                return log (second_value);
+            }
+            else
+            {
+                *code_error |= ERR_LOG_NEGAT;
+            }
+        }
         default:
         {
-            printf ("fuck you\n");
             break;
         }
     }

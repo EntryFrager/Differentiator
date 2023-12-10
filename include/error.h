@@ -36,16 +36,18 @@ enum code_error {                               ///< Error codes.
     ERR_FREAD         = 1 << 5,
     ERR_DIV_ZERO      = 1 << 6,
     ERR_SQRT_NEGAT    = 1 << 7,
-    ERR_TREE          = 1 << 8,
+    ERR_LOG_NEGAT     = 1 << 8,
+    SYNTAX_ERROR      = 1 << 9,
+    ERR_TREE          = 1 << 10,
 
-    TREE_ERR_PTR      = 1 << 9,
-    TREE_INIT         = 1 << 10,
-    TREE_ERR_ROOT_PTR = 1 << 11,
+    TREE_ERR_PTR      = 1 << 11,
+    TREE_INIT         = 1 << 12,
+    TREE_ERR_ROOT_PTR = 1 << 13,
     
-    NODE_ERR          = 1 << 12,
-    NODE_DATA_ERR_PTR = 1 << 13,
+    NODE_ERR          = 1 << 14,
+    NODE_DATA_ERR_PTR = 1 << 15,
 
-    ERR_CNT           = 14
+    ERR_CNT           = 16
 };
 
 void my_strerr (unsigned code_error, FILE *stream);    ///< Error print function.

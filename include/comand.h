@@ -13,3 +13,5 @@ DEF_CMD(SIN, "sin", {})
 DEF_CMD(COS, "cos", {})
 
 DEF_CMD(SQRT, "sqrt", {})
+
+DEF_CMD(LN, "ln", {})

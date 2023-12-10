@@ -7,7 +7,7 @@
 #include "include/tree.h"
 #include "include/utils.h"
 
-#define syntax_assert(expr) if (!expr) {printf ("SYNTAX ERROR: expected \"" #expr "\""); abort();}
+#define syntax_assert(expr) if (!expr) {printf ("\x1b[31mSYNTAX ERROR: expected \"" #expr "\"\x1b[0m"); *code_error |= SYNTAX_ERROR;}
 
 int input_expr (TREE *tree, int *code_error);
 

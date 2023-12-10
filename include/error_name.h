@@ -17,6 +17,10 @@ DEF_ERR ("division by zero")
 
 DEF_ERR ("root of a negative number")
 
+DEF_ERR ("the number under the logarithm is less than 0")
+
+DEF_ERR ("Syntax error")
+
 DEF_ERR ("there was an error in the tree")
 
 DEF_ERR ("pointer to tree structure null")

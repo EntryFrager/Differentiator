@@ -52,6 +52,7 @@ enum op_command {
     SIN,
     COS,
     SQRT,
+    LN,
     OPEN_BRACKET,
     CLOSE_BRACKET
 };

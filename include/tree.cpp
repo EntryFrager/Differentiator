@@ -157,7 +157,10 @@ int print_tree (NODE *node, FILE *stream, int *code_error)
 
     PRINT_BRACKET (node->left, "(");
     
-    CHECK_ERROR_RETURN (print_tree (node->left, stream, code_error), *code_error);
+    if (node->type == OP && node->data.types_op < SIN)
+    {
+        CHECK_ERROR_RETURN (print_tree (node->left, stream, code_error), *code_error);
+    }
 
     PRINT_BRACKET (node->left, ")");
 
@@ -167,8 +170,12 @@ int print_tree (NODE *node, FILE *stream, int *code_error)
                 {fprintf (stream, "%s", NAME_OP[node->data.types_op]);});
 
     PRINT_BRACKET (node->right, "(");
+
+    if (node->type == OP && node->data.types_op >= SIN) {fprintf (stream, "(");}
     
     CHECK_ERROR_RETURN (print_tree (node->right, stream, code_error), *code_error);
+
+    if (node->type == OP && node->data.types_op >= SIN) {fprintf (stream, ")");}
 
     PRINT_BRACKET (node->right, ")");
 

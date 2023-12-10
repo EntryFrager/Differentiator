@@ -67,6 +67,8 @@ char *skip_isspace (char *str, int *code_error)
 
     new_str[pos] = '\0';
 
+    free (str);
+
     return new_str;
 }
 
