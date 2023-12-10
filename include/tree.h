@@ -25,8 +25,9 @@
 #ifdef DEBUG_TREE
     #define TREE_LOG(tree, code_error)                                          \
     {                                                                           \
-        tree_dump_text (tree, code_error, __FILE__, __func__, __LINE__);        \
+        tree_dump_text (tree, &code_error, __FILE__, __func__, __LINE__);       \
         tree_dump_graph_viz (tree, __FILE__, __func__, __LINE__);               \
+        print_tex_tree (tree, &code_error);                                     \
     }
 
     #define assert_tree(tree, ret_value)                                                            \
@@ -100,8 +101,7 @@ typedef struct {
     const char *fp_dot_name       = NULL;
     const char *fp_name_html      = NULL;
     const char *fp_image          = NULL;
-
-    FILE *fp_html_dot = NULL;
+    const char *fp_tex_name       = NULL;
 #endif
 } INFO;
 
@@ -138,7 +138,7 @@ int destroy_tree (TREE *tree, int *code_error);
 
     int node_verificator (NODE *node);
 
-    void tree_dump_text (TREE *tree, const int code_error, 
+    void tree_dump_text (TREE *tree, const int *code_error, 
                          const char *file_err, const char *func_err, 
                          const int line_err);
 
@@ -146,6 +146,10 @@ int destroy_tree (TREE *tree, int *code_error);
                               const char *func_err, const int line_err);
 
     void tree_dump_html (TREE *tree, int *code_error);
+
+    void print_tex_tree (TREE *tree, int *code_error);
+
+    NODE *print_tex_node (NODE *node, FILE *stream);
 #endif
 
 #endif //TREE_H

@@ -1,17 +1,22 @@
 #include "diff.h"
 
-NODE *n_diff (NODE *node, size_t n, int *code_error)
+NODE *n_diff (TREE *tree, size_t n, int *code_error)
 {
-    my_assert (node != NULL, ERR_PTR);
+    my_assert (tree->root != NULL, ERR_PTR);
 
     for (size_t i = 0; i < n; i++)
     {
-        CHECK_ERROR_RETURN (diff (node, code_error), NULL);
+        CHECK_ERROR_RETURN (tree->root = diff (tree->root, code_error), NULL);
 
-        CHECK_ERROR_RETURN (node = tree_simplific (node, code_error), NULL);
+        CHECK_ERROR_RETURN (tree->root = tree_simplific (tree->root, code_error), NULL);
+
+        set_parent (tree->root, NULL);
+
+        CHECK_ERROR_RETURN (print_tree (tree->root, stdout, code_error), NULL);
+        printf ("\n");
     }
 
-    return node;
+    return tree->root;
 }
 
 NODE *diff (NODE *node, int *code_error)

@@ -39,7 +39,8 @@
 #define R_RE_HANGING CHECK_ERROR_RETURN (node = hanging_tree (node, node->right, node->parent, code_error), NULL)
 
 #define PRINT_BRACKET(node_d, str)                                      \
-    if (node_d != NULL && node_d->type == OP && node_d->data.types_op <= DEG) {fprintf (stream, str);}  \
+    if (node_d != NULL && node_d->data.types_op <= DEG                  \
+        && (node_d->type == OP || (node_d->type == NUM && node_d->data.value < 0))) {fprintf (stream, str);}  \
 
 
 #endif //DSL_H

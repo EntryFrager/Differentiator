@@ -3,10 +3,10 @@
 
 #include <math.h>
 
-#include "input.h"
+#include "include/input.h"
 #include "include/tree.h"
 
-NODE *n_diff (NODE *node, size_t n, int *code_error);
+NODE *n_diff (TREE *tree, size_t n, int *code_error);
 
 NODE *diff (NODE *node, int *code_error);
 

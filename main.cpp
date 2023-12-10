@@ -9,30 +9,12 @@ int main ()
     CHECK_ERROR_PRINT (create_tree (&tree, &code_error));
 
     CHECK_ERROR_PRINT (input_expr (&tree, &code_error));
-
-    CHECK_ERROR_PRINT (print_tree (tree.root, stdout, &code_error));
-
-    printf ("\n");
     
-    CHECK_ERROR_PRINT (tree.root = diff (tree.root, &code_error));
+    CHECK_ERROR_PRINT (tree.root = n_diff (&tree, 2, &code_error));
 
-    TREE_LOG (&tree, 0);
+    TREE_LOG (&tree, code_error);
 
-    set_parent (tree.root, NULL);
-
-    TREE_LOG (&tree, 0);
-
-    CHECK_ERROR_PRINT (print_tree (tree.root, stdout, &code_error));
-
-    TREE_LOG (&tree, 0);
-
-    CHECK_ERROR_PRINT (tree.root = tree_simplific (tree.root, &code_error));
-
-    printf ("\n");
-
-    CHECK_ERROR_PRINT (print_tree (tree.root, stdout, &code_error));
-
-    //CHECK_ERROR_PRINT (destroy_tree (&tree, &code_error));
+    CHECK_ERROR_PRINT (destroy_tree (&tree, &code_error));
 
     return 0;
 }
