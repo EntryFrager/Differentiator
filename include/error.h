@@ -13,12 +13,14 @@
 
 #define DEBUG
 
+#undef $$
+//
 #ifdef DEBUG
-    #define CHECK_ERROR_PRINT(func) func; if (code_error != ERR_NO) my_strerr (code_error, stderr);
-    #define CHECK_ERROR_RETURN(func, ret_value) func; if (*code_error != 0) {return ret_value;}
+    #define PRINT_ERROR() if (code_error != ERR_NO) my_strerr (code_error, stderr);
+    #define $$(ret_value) if (*code_error != 0) {return ret_value;}
 #else
-    #define CHECK_ERROR_PRINT(func) func
-    #define CHECK_ERROR(func) func
+    #define PRINT_ERROR()
+    #define $$(...)
 #endif
 
 #define my_assert(expr, cd_err) if (!(expr)) {  \

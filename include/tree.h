@@ -43,23 +43,21 @@
     #define assert_tree(...)
 #endif
 
-enum op_command {
+enum op_comand {
     OP_NO = -1,
     ADD,
     SUB,
     MUL,
     DIV,
     DEG,
+    OP_SEP,
     SIN,
     COS,
     SQRT,
-    LN,
-    OPEN_BRACKET,
-    CLOSE_BRACKET
+    LN
 };
 
 enum types {
-    DEF_TYPE,
     NUM,
     OP,
     VAR
@@ -68,14 +66,11 @@ enum types {
 const bool LEFT  = false;
 const bool RIGHT = true;
 
-const bool INIT = true;
-const bool INIT_NO = false;
-
 typedef double ELEMENT;
 
 union DATA {
     ELEMENT value;
-    op_command types_op;
+    op_comand types_op;
     char var;
 };
 
@@ -89,7 +84,7 @@ typedef struct NODE {
 } NODE;
 
 typedef struct {
-    char *fp_name_expr = NULL;
+    const char *fp_name_expr = NULL;
     FILE *fp_expr      = NULL;
 
     size_t size_file = 0;
@@ -108,28 +103,36 @@ typedef struct {
 typedef struct {
     NODE *root = NULL;
 
-    bool init_status = false;
+    bool is_init = false;
 
     INFO info = {};
 } TREE;
 
-int create_tree (TREE *tree, int *code_error);
+int create_tree (TREE *tree, int argc, char *argv[], int *code_error);
 
 NODE *create_node_num (ELEMENT value, NODE *left, NODE *right, NODE *parent, int *code_error);
 
-NODE *create_node_op (op_command types_op, NODE *left, NODE *right, NODE *parent, int *code_error);
+NODE *create_node_op (op_comand types_op, NODE *left, NODE *right, NODE *parent, int *code_error);
 
 NODE *create_node_var (char var, NODE *left, NODE *right, NODE *parent, int *code_error);
 
-int add_node (NODE *node, ELEMENT value, char var, op_command types_op, int type, const bool side, int *code_error);
-
 NODE *set_parent (NODE *node, NODE *parent);
 
-int delete_node (NODE *node, int *code_error);
+int delete_node (NODE *node);
 
 NODE *copy_tree (NODE *node, NODE *parent, int *code_error);
 
-int print_tree (NODE *node, FILE *stream, int *code_error);
+void print_tree (NODE *node, FILE *stream, int *code_error);
+
+void print_num (NODE *node, FILE *stream, int *code_error);
+
+void print_operator (NODE *node, FILE *stream, int *code_error);
+
+bool print_left_node_bracket (NODE *node, FILE *stream, int *code_error);
+
+bool print_right_node_bracket (NODE *node, FILE *stream, int *code_error);
+
+bool print_bracket (NODE *node, NODE *node_side, FILE *stream, int *code_error);
 
 int destroy_tree (TREE *tree, int *code_error);
 
@@ -149,7 +152,11 @@ int destroy_tree (TREE *tree, int *code_error);
 
     void print_tex_tree (TREE *tree, int *code_error);
 
-    NODE *print_tex_node (NODE *node, FILE *stream);
+    NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error);
+
+    void print_tex_div (NODE *node, FILE *fp_tex, int *code_error);
+
+    void print_tex_operator (NODE *node, FILE *fp_tex, int *code_error);
 #endif
 
 #endif //TREE_H

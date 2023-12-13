@@ -1,20 +1,22 @@
 #include "diff.h"
 
-int main ()
+int main (int argc, char *argv[])
 {
     int code_error = 0;
 
     TREE tree = {};
 
-    CHECK_ERROR_PRINT (create_tree (&tree, &code_error));
-
-    CHECK_ERROR_PRINT (input_expr (&tree, &code_error));
+    create_tree (&tree, argc, argv, &code_error);
     
-    CHECK_ERROR_PRINT (tree.root = n_diff (&tree, 2, &code_error));
+    tree.root = n_diff (&tree, 1, &code_error);
+
+    print_tree (tree.root, stdout, &code_error);
 
     TREE_LOG (&tree, code_error);
 
-    CHECK_ERROR_PRINT (destroy_tree (&tree, &code_error));
+    destroy_tree (&tree, &code_error);
+
+    PRINT_ERROR();
 
     return 0;
 }

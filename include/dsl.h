@@ -1,14 +1,9 @@
 #ifndef DSL_H
 #define DSL_H
 
-#define CHECK_NODE_PTR(ret_value) if(!node) {return ret_value;}
+#define IS_NODE_PTR_NULL(ret_value) if(!node) {return ret_value;}
 
-#define CHECK_TYPE(type, expr_var, expr_num, expr_op)   \
-    if (type == VAR) {expr_var}                         \
-    else if (type == NUM) {expr_num}                    \
-    else {expr_op}
-
-#define CHECK_NUM(node_type, expr) if (node_type == NUM) {expr; break;}
+#define IF_NUM(node_type, expr) if (node_type == NUM) {expr; break;}
 
 #define NUM_(value, parent) create_node_num (value, NULL, NULL, parent, code_error)
 #define VAR_(str, parent) create_node_var (str, NULL, NULL, parent, code_error)
@@ -35,12 +30,9 @@
 #define R_TYPE node->right->type
 #define R_VALUE node->right->data.value
 
-#define L_RE_HANGING CHECK_ERROR_RETURN (node = hanging_tree (node, node->left, node->parent, code_error), NULL)
-#define R_RE_HANGING CHECK_ERROR_RETURN (node = hanging_tree (node, node->right, node->parent, code_error), NULL)
+#define L_RE_HANGING node = hanging_tree (node, node->left, node->parent, code_error)
+#define R_RE_HANGING node = hanging_tree (node, node->right, node->parent, code_error)
 
-#define PRINT_BRACKET(node_d, str)                                      \
-    if (node_d != NULL && node_d->data.types_op <= DEG                  \
-        && (node_d->type == OP || (node_d->type == NUM && node_d->data.value < 0))) {fprintf (stream, str);}  \
-
+#define PRINT_CLOSE_BRACKET(stream) if (is_bracket) {fprintf (stream, ")"); is_bracket = false;}
 
 #endif //DSL_H

@@ -1,6 +1,6 @@
 #include "tree.h"
-
-#define DEF_CMD(num, name, ...) name,
+//name_tex
+#define DEF_CMD(num, name) name,
 
 static const char *NAME_OP[] = {
     #include "comand.h"
@@ -40,7 +40,7 @@ void tree_dump_text (TREE *tree, const int *code_error,
         {
             DUMP_LOG_PARAM ("tree[%p] \"tree\" called from %s(%d) %s", tree, file_err, line_err, func_err);
             DUMP_LOG ("{");
-            DUMP_LOG_PARAM ("\tinit_status = %d", tree->init_status);
+            DUMP_LOG_PARAM ("\tis_init = %d", tree->is_init);
             DUMP_LOG ("\t{");
 
             if (tree->root != NULL)
@@ -70,12 +70,30 @@ void tree_dump_text (TREE *tree, const int *code_error,
 
 void print_tree_dump (NODE *node, FILE *stream)
 {
-    CHECK_NODE_PTR ();
+    IS_NODE_PTR_NULL ();
 
-    CHECK_TYPE (node->type, 
-                {fprintf (stream, "\t\t*node[%p] = %c;\n", node, node->data.var);},
-                {fprintf (stream, "\t\t*node[%p] = %lf;\n", node, node->data.value);},
-                {fprintf (stream, "\t\t*node[%p] = %s;\n", node, NAME_OP[node->data.types_op]);})
+    switch (node->type)
+    {
+        case (NUM):
+        {
+            fprintf (stream, "\t\t*node[%p] = %lg;\n", node, node->data.value);
+            break;
+        }
+        case (OP):
+        {
+            fprintf (stream, "\t\t*node[%p] = %s;\n", node, NAME_OP[node->data.types_op]);
+            break;
+        }
+        case (VAR):
+        {
+            fprintf (stream, "\t\t*node[%p] = %c;\n", node, node->data.var);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 
     print_tree_dump (node->left, stream);
     print_tree_dump (node->right, stream);
@@ -115,13 +133,15 @@ void tree_dump_graph_viz (TREE *tree, const char *file_err,
         my_strerr (ERR_FCLOSE, stderr);
     }
 
-    const char command[] = "dot -Tsvg include/dump.dot -o dot.svg";
+    const char comand[] = "dot -Tsvg include/dump.dot -o dot.svg";
 
-    system (command);
+    system (comand);
 
     int code_error = 0;
 
-    CHECK_ERROR_PRINT (tree_dump_html (tree, &code_error));
+    tree_dump_html (tree, &code_error);
+
+    my_strerr (code_error, stdout);
 }
 
 #undef DUMP_DOT
@@ -140,14 +160,35 @@ void tree_dump_graph_viz (TREE *tree, const char *file_err,
 
 int create_node_dot (NODE *node, FILE *stream, int ip_parent, int ip)
 {
-    CHECK_NODE_PTR (ip - 1);
+    IS_NODE_PTR_NULL (ip - 1);
 
-    char *color = BLACK_COLOR;
+    const char *color = BLACK_COLOR;
 
-    CHECK_TYPE (node->type, 
-                {color = LIGHT_GREEN_COLOR; DUMP_DOT ("%c", node->data.var);},
-                {color = BLUE_COLOR; DUMP_DOT ("%lf", node->data.value);},
-                {color = PURPLE_COLOR; DUMP_DOT ("%s", NAME_OP[node->data.types_op]);});
+    switch (node->type)
+    {
+        case (NUM):
+        {
+            color = BLUE_COLOR;
+            DUMP_DOT ("%lg", node->data.value);
+            break;
+        }
+        case (OP):
+        {
+            color = PURPLE_COLOR; 
+            DUMP_DOT ("%s", NAME_OP[node->data.types_op]);
+            break;
+        }
+        case (VAR):
+        {
+            color = LIGHT_GREEN_COLOR; 
+            DUMP_DOT ("%c", node->data.var);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 
     if (ip > 0)
     {
@@ -165,7 +206,6 @@ int create_node_dot (NODE *node, FILE *stream, int ip_parent, int ip)
 void tree_dump_html (TREE *tree, int *code_error)
 {
     FOPEN_ (fp_dot, tree->info.fp_image, "r");
-
     FOPEN_ (fp_html_dot, tree->info.fp_name_html, "w+");
     
     size_t size_dot = get_file_size (fp_dot, code_error);
@@ -188,6 +228,9 @@ void tree_dump_html (TREE *tree, int *code_error)
     free (data_dot);
 }
 
+#define PRINT_TEX(str) fprintf (fp_tex, str);
+#define PRINT_TEX_PARAM(str, ...) fprintf (fp_tex, str, __VA_ARGS__);
+
 void print_tex_tree (TREE *tree, int *code_error)
 {
     my_assert (tree != NULL, ERR_PTR);
@@ -196,7 +239,7 @@ void print_tex_tree (TREE *tree, int *code_error)
 
     if (fp_tex != NULL)
     {
-        fprintf (fp_tex, "\\documentclass[12pt, letterpaper]{article}\n"
+        PRINT_TEX ("\\documentclass[12pt, letterpaper]{article}\n"
                          "\\title {Deriving the derivative of a given expression}\n"
                          "\\author{Pavlov Matvey}\n"
                          "\\date{\\today}\n"
@@ -204,58 +247,111 @@ void print_tex_tree (TREE *tree, int *code_error)
                          "\\maketitle\n"
                          "\\[");
 
-        print_tex_node (tree->root, fp_tex);
+        print_tex_node (tree->root, fp_tex, code_error);
+        $$()
 
-        fprintf (fp_tex, "\\]\n"
+        PRINT_TEX ("\\]\n"
                           "\\end{document}");
     }
 
     FCLOSE_ (fp_tex);
 }
 
-NODE *print_tex_node (NODE *node, FILE *stream)
+NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
 {
-    CHECK_NODE_PTR (NULL);
+    my_assert (fp_tex != NULL, ERR_PTR);
+    IS_NODE_PTR_NULL (NULL);
 
-    if (node->data.types_op == DIV)
+    switch (node->type)
     {
-        fprintf (stream, "\\frac{");
-        PRINT_BRACKET (node->left, "(");
-        print_tex_node (node->left, stream);
-        PRINT_BRACKET (node->left, ")");
-        fprintf (stream, "}{");
-        PRINT_BRACKET (node->right, "(");
-        print_tex_node (node->right, stream);
-        PRINT_BRACKET (node->right, ")");
-        fprintf (stream, "}");
-    }
-    else
-    {
-        PRINT_BRACKET (node->left, "(");
-
-        if (node->type == OP && node->data.types_op < SIN && node->data.types_op != DIV)
+        case (NUM):
         {
-            print_tex_node (node->left, stream);
+            print_num (node, fp_tex, code_error);
+            $$ (NULL);
+
+            break;
         }
+        case (VAR):
+        {
+            PRINT_TEX_PARAM ("%c", node->data.var);
+            break;
+        }
+        case (OP):
+        {
+            if (node->data.types_op == DIV)
+            {
+                print_tex_div (node, fp_tex, code_error);
+                $$(NULL);
+            }
+            else
+            {
+                bool is_bracket = false;
 
-        PRINT_BRACKET (node->left, ")");
+                if (node->data.types_op < OP_SEP)
+                {
+                    is_bracket = print_left_node_bracket (node, fp_tex, code_error);
+                    $$ (NULL);
+                    
+                    print_tex_node (node->left, fp_tex, code_error);
+                    $$ (NULL);
 
-        CHECK_TYPE (node->type,
-                    {fprintf (stream, "%c", node->data.var);},
-                    {fprintf (stream, "%lf", node->data.value);},
-                    {if (node->data.types_op < SIN) {fprintf (stream, "%s", NAME_OP[node->data.types_op]);}
-                     else {fprintf (stream, "\\%s", NAME_OP[node->data.types_op]);}});
+                    PRINT_CLOSE_BRACKET (fp_tex);
+                }
 
-        PRINT_BRACKET (node->right, "(");
-        if (node->type == OP && node->data.types_op >= SIN) {fprintf (stream, "(");}
-        
-        print_tex_node (node->right, stream);
+                print_tex_operator (node, fp_tex, code_error);
+                
+                is_bracket = print_right_node_bracket (node, fp_tex, code_error);
+                $$ (NULL);
 
-        if (node->type == OP && node->data.types_op >= SIN) {fprintf (stream, ")");}
-        PRINT_BRACKET (node->right, ")");
+                print_tex_node (node->right, fp_tex, code_error);
+                $$ (NULL);
+
+                PRINT_CLOSE_BRACKET (fp_tex);
+            }
+
+            break;
+        }
+        default:
+        {
+            break;
+        }
     }
 
     return node;
 }
+
+void print_tex_div (NODE *node, FILE *fp_tex, int *code_error)
+{
+    my_assert (node != NULL, ERR_PTR);
+    my_assert (fp_tex != NULL, ERR_PTR);
+
+    PRINT_TEX ("\\frac{");
+    print_tex_node (node->left, fp_tex, code_error);
+    PRINT_TEX ("}{");
+    print_tex_node (node->right, fp_tex, code_error);
+    PRINT_TEX ("}");
+}
+
+void print_tex_operator (NODE *node, FILE *fp_tex, int *code_error)
+{
+    my_assert (node != NULL, ERR_PTR);
+    my_assert (fp_tex != NULL, ERR_PTR);
+
+    if (node->data.types_op ==  MUL)
+    {
+        PRINT_TEX ("\\cdot ");
+    }
+    else if (node->data.types_op > OP_SEP)
+    {
+        PRINT_TEX_PARAM ("\\%s", NAME_OP[node->data.types_op]);
+    }
+    else
+    {
+        PRINT_TEX_PARAM ("%s", NAME_OP[node->data.types_op]);
+    }
+}
+
+#undef PRINT_TEX
+#undef PRINT_TEX_PARAM
 
 #endif

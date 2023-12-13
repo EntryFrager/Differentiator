@@ -11,22 +11,6 @@
 
 int input_expr (TREE *tree, int *code_error);
 
-NODE *get_g (char **str, int *code_error);
-
-NODE *get_e (char **str, int *code_error);
-
-NODE *get_d (char **str, int *code_error);
-
-NODE *get_t (char **str, int *code_error);
-
-NODE *get_p (char **str, int *code_error);
-
-NODE *get_trig (char **str, int *code_error);
-
-op_command is_trig (char **str, int *code_error);
-
-NODE *get_var (char **str, int *code_error);
-
-NODE *get_n (char **str, int *code_error);
+NODE *get_expr (char **str, int *code_error);
 
 #endif //INPUT_H
