@@ -142,7 +142,7 @@ size_t get_n_tokens (char *str, int *code_error)
 
     while (*str != '\0')
     {
-        if (*str == '+' || *str == '-' || *str == '*' || *str == '/' || *str == '(' || *str == ')')
+        if (*str == '+' || *str == '-' || *str == '*' || *str == '^' || *str == '/' || *str == '(' || *str == ')')
         {
             n_tokens++;
             str++;
@@ -170,7 +170,6 @@ NODE *get_expr (TOKEN *token, int *code_error)
 
     NODE *node = get_add_sub (token, pos, code_error);
 
-    printf ("%d\n", *pos);
     syntax_assert (token[*pos].type == DEF_TYPE);
 
     $$(NULL);
@@ -310,7 +309,7 @@ NODE *get_bracket (TOKEN *token, size_t *pos, int *code_error)
 
         NODE *node = get_add_sub (token, pos, code_error);
 
-        syntax_assert (token[*pos].type == OP && token[*pos].data.types_op == DEG);
+        syntax_assert (token[*pos].type == OP && token[*pos].data.types_op == CLOSE_BRACKET);
 
         (*pos)++;
 
@@ -330,10 +329,12 @@ NODE *get_trig (TOKEN *token, size_t *pos, int *code_error)
 
     if (token[*pos].type == OP)
     {
+        op_comand op = token[(*pos)++].data.types_op;
+
         NODE *node_r = get_bracket (token, pos, code_error);
         $$(NULL);
         
-        switch (token[*pos].data.types_op)
+        switch (op)
         {
             case (SIN):
             {

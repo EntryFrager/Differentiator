@@ -2,13 +2,21 @@ digraph List {
 	rankdir = HR;
 	bgcolor = "#696969";
 	node0 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{+}"];
-	node1 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{x}"];
-	node0 -> node1 [color = "#ccff99"];
-	node2 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{+}"];
-	node0 -> node2 [color = "#8B00FF"];
-	node3 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{2}"];
-	node2 -> node3 [color = "#00BFFF"];
-	node4 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{3}"];
-	node2 -> node4 [color = "#00BFFF"];
+	node1 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{\cos}"];
+	node0 -> node1 [color = "#8B00FF"];
+	node2 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{1}"];
+	node1 -> node2 [color = "#00BFFF"];
+	node3 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{x}"];
+	node1 -> node3 [color = "#ccff99"];
+	node4 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{*}"];
+	node0 -> node4 [color = "#8B00FF"];
+	node5 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{0.693147}"];
+	node4 -> node5 [color = "#00BFFF"];
+	node6 [shape = Mrecord, style = filled, fillcolor = "#8B00FF", label = "{^}"];
+	node4 -> node6 [color = "#8B00FF"];
+	node7 [shape = Mrecord, style = filled, fillcolor = "#00BFFF", label = "{2}"];
+	node6 -> node7 [color = "#00BFFF"];
+	node8 [shape = Mrecord, style = filled, fillcolor = "#ccff99", label = "{x}"];
+	node6 -> node8 [color = "#ccff99"];
 	label = "tree_dump from function main, Tree/main.cpp:15";}
 

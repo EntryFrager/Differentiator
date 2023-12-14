@@ -8,7 +8,7 @@ int main (int argc, char *argv[])
 
     create_tree (&tree, argc, argv, &code_error);
     
-    //tree.root = n_diff (&tree, 1, &code_error);
+    tree.root = n_diff (&tree, 1, &code_error);
 
     print_tree (tree.root, stdout, &code_error);
 
