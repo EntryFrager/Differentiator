@@ -1,8 +1,8 @@
 #include "tree.h"
 //name_tex
-#define DEF_CMD(num, name) name,
+#define DEF_CMD(num, name, name_tex) name_tex,
 
-static const char *NAME_OP[] = {
+static const char *NAME_OP_TEX[] = {
     #include "comand.h"
 };
 
@@ -81,14 +81,15 @@ void print_tree_dump (NODE *node, FILE *stream)
         }
         case (OP):
         {
-            fprintf (stream, "\t\t*node[%p] = %s;\n", node, NAME_OP[node->data.types_op]);
+            fprintf (stream, "\t\t*node[%p] = %s;\n", node, NAME_OP_TEX[node->data.types_op]);
             break;
         }
         case (VAR):
         {
-            fprintf (stream, "\t\t*node[%p] = %c;\n", node, node->data.var);
+            fprintf (stream, "\t\t*node[%p] = %s;\n", node, node->data.var);
             break;
         }
+        case (DEF_TYPE): {}
         default:
         {
             break;
@@ -175,15 +176,16 @@ int create_node_dot (NODE *node, FILE *stream, int ip_parent, int ip)
         case (OP):
         {
             color = PURPLE_COLOR; 
-            DUMP_DOT ("%s", NAME_OP[node->data.types_op]);
+            DUMP_DOT ("%s", NAME_OP_TEX[node->data.types_op]);
             break;
         }
         case (VAR):
         {
             color = LIGHT_GREEN_COLOR; 
-            DUMP_DOT ("%c", node->data.var);
+            DUMP_DOT ("%s", node->data.var);
             break;
         }
+        case (DEF_TYPE): {}
         default:
         {
             break;
@@ -273,7 +275,7 @@ NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
         }
         case (VAR):
         {
-            PRINT_TEX_PARAM ("%c", node->data.var);
+            PRINT_TEX_PARAM ("%s", node->data.var);
             break;
         }
         case (OP):
@@ -311,6 +313,7 @@ NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
 
             break;
         }
+        case (DEF_TYPE):
         default:
         {
             break;
@@ -337,18 +340,7 @@ void print_tex_operator (NODE *node, FILE *fp_tex, int *code_error)
     my_assert (node != NULL, ERR_PTR);
     my_assert (fp_tex != NULL, ERR_PTR);
 
-    if (node->data.types_op ==  MUL)
-    {
-        PRINT_TEX ("\\cdot ");
-    }
-    else if (node->data.types_op > OP_SEP)
-    {
-        PRINT_TEX_PARAM ("\\%s", NAME_OP[node->data.types_op]);
-    }
-    else
-    {
-        PRINT_TEX_PARAM ("%s", NAME_OP[node->data.types_op]);
-    }
+    PRINT_TEX_PARAM ("%s", NAME_OP_TEX[node->data.types_op]);
 }
 
 #undef PRINT_TEX

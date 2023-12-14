@@ -77,12 +77,17 @@ NODE *diff (NODE *node, int *code_error)
                 {
                     return MUL_(DIV_(NUM_(1, NULL), COPY_R), DIF_R);
                 }
+                case (OP_NO): {}
+                case (OP_SEP): {}
+                case (OPEN_BRACKET): {}
+                case (CLOSE_BRACKET): {}
                 default:
                 {
                     break;
                 }
             }
         }
+        case (DEF_TYPE): {}
         default:
         {
             break;
@@ -179,6 +184,14 @@ NODE *tree_simplific (NODE *node, int *code_error)
                             })
                     break;
                 }
+                case (OP_NO): {}
+                case (OP_SEP): {}
+                case (SIN): {}
+                case (COS): {}
+                case (SQRT): {}
+                case (LN): {}
+                case (OPEN_BRACKET): {}
+                case (CLOSE_BRACKET): {}
                 default:
                 {
                     break;
@@ -249,6 +262,7 @@ ELEMENT eval_tree (NODE *node, ELEMENT var_value, int *code_error)
                               eval_tree (node->left, var_value, code_error), 
                               code_error);
         }
+        case (DEF_TYPE): {}
         default:
         {
             break;

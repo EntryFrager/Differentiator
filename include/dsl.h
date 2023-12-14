@@ -35,4 +35,6 @@
 
 #define PRINT_CLOSE_BRACKET(stream) if (is_bracket) {fprintf (stream, ")"); is_bracket = false;}
 
+#define str_len(str) sizeof (str) - 1
+
 #endif //DSL_H

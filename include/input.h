@@ -11,6 +11,6 @@
 
 int input_expr (TREE *tree, int *code_error);
 
-NODE *get_expr (char **str, int *code_error);
+NODE *get_expr (TOKEN *token, int *code_error);
 
 #endif //INPUT_H

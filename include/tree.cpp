@@ -1,7 +1,7 @@
 #include "tree.h"
 #include "input.h"
 
-#define DEF_CMD(num, name) name,
+#define DEF_CMD(num, name, ...) name,
 
 static const char *NAME_OP[] = {
     #include "comand.h"
@@ -55,7 +55,6 @@ NODE *calloc_node (NODE *left, NODE *right, NODE *parent, int *code_error)
     return node;
 }
 
-//union check type and value
 NODE *create_node_num (ELEMENT value, NODE *left, NODE *right, NODE *parent, int *code_error)
 {
     NODE *node = calloc_node (left, right, parent, code_error);
@@ -77,7 +76,7 @@ NODE *create_node_op (op_comand types_op, NODE *left, NODE *right, NODE *parent,
     return node;
 }
 
-NODE *create_node_var (char var, NODE *left, NODE *right, NODE *parent, int *code_error)
+NODE *create_node_var (char *var, NODE *left, NODE *right, NODE *parent, int *code_error)
 {
     NODE *node = calloc_node (left, right, parent, code_error);
     $$(NULL);
@@ -142,6 +141,7 @@ NODE *copy_tree (NODE *node, NODE *parent, int *code_error)
 
             break;
         }
+        case (DEF_TYPE): {}
         default:
         {
             break;
@@ -177,7 +177,7 @@ void print_tree (NODE *node, FILE *stream, int *code_error)
         }
         case (VAR):
         {
-            PRINT_NODE_PARAM ("%c", node->data.var);
+            PRINT_NODE_PARAM ("%s", node->data.var);
             break;
         }
         case (OP):
@@ -187,6 +187,7 @@ void print_tree (NODE *node, FILE *stream, int *code_error)
 
             break;
         }
+        case (DEF_TYPE): {}
         default:
         {
             break;

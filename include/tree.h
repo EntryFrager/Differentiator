@@ -54,10 +54,13 @@ enum op_comand {
     SIN,
     COS,
     SQRT,
-    LN
+    LN,
+    OPEN_BRACKET,
+    CLOSE_BRACKET
 };
 
 enum types {
+    DEF_TYPE,
     NUM,
     OP,
     VAR
@@ -71,7 +74,7 @@ typedef double ELEMENT;
 union DATA {
     ELEMENT value;
     op_comand types_op;
-    char var;
+    char *var;
 };
 
 typedef struct NODE {
@@ -79,9 +82,14 @@ typedef struct NODE {
     NODE *right  = NULL;
     NODE *parent = NULL;
 
-    int type = 0;
+    types type = DEF_TYPE;
     DATA data = {};
 } NODE;
+
+typedef struct TOKEN {
+    types type = DEF_TYPE;
+    DATA data = {};
+} TOKEN;
 
 typedef struct {
     const char *fp_name_expr = NULL;
@@ -102,6 +110,9 @@ typedef struct {
 
 typedef struct {
     NODE *root = NULL;
+    char **vars = NULL;
+
+    TOKEN *token = NULL;
 
     bool is_init = false;
 
@@ -114,7 +125,7 @@ NODE *create_node_num (ELEMENT value, NODE *left, NODE *right, NODE *parent, int
 
 NODE *create_node_op (op_comand types_op, NODE *left, NODE *right, NODE *parent, int *code_error);
 
-NODE *create_node_var (char var, NODE *left, NODE *right, NODE *parent, int *code_error);
+NODE *create_node_var (char *var, NODE *left, NODE *right, NODE *parent, int *code_error);
 
 NODE *set_parent (NODE *node, NODE *parent);
 
