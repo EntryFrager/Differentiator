@@ -1,4 +1,5 @@
 #include "tree.h"
+#include "../diff.h"
 
 #ifdef DEBUG_TREE
 
@@ -12,11 +13,16 @@ static const char *NAME_OP_TEX[] = {
 
 static const size_t STANDARD_SIZE_EXPR_TEX = 10;
 
+static void print_tex_tree (TREE *tree, FILE *fp_tex, size_t n_diff, int *code_error);
+static void print_tex_node (NODE *node, FILE *fp_tex, NODE **node_replace, size_t *pos_replace, int *code_error);
+static void print_tex_div (NODE *node, FILE *fp_tex, NODE** node_replace, size_t *pos_replace, int *code_error);
+static void print_tex_operator (NODE *node, FILE *fp_tex, int *code_error);
 static void print_tree_dump (NODE *node, FILE *stream);
 static int create_node_dot (NODE *node, FILE *stream, int ip_parent, int ip);
-static void print_replace (NODE *node, FILE *fp_tex, int *code_error);
+static void print_replace (NODE *node, FILE *fp_tex, size_t n_diff, int *code_error);
 static void get_node_replace (NODE *node, NODE **node_replace, size_t *pos_replace, int *code_error);
 static size_t get_n_replace (NODE *node);
+static void print_tex_taylor (TREE *tree, FILE *fp_tex, size_t n_pow, int *code_error);
 
 #define DUMP_LOG(str) fprintf (fp_err, str "\n");
 #define DUMP_LOG_PARAM(str, ...) fprintf (fp_err, str "\n", __VA_ARGS__);
@@ -238,7 +244,7 @@ void tree_dump_html (TREE *tree, int *code_error)
 #define PRINT_TEX(str) fprintf (fp_tex, str);
 #define PRINT_TEX_PARAM(str, ...) fprintf (fp_tex, str, __VA_ARGS__);
 
-void print_tex_tree (TREE *tree, int *code_error)
+void print_tex (TREE *tree, int *code_error)
 {
     my_assert (tree != NULL, ERR_PTR);
 
@@ -253,22 +259,32 @@ void print_tex_tree (TREE *tree, int *code_error)
                          "\\begin{document}\n"
                          "\\maketitle\n");
 
-        if (tree->root->tree_size > STANDARD_SIZE_EXPR_TEX)
-        {
-            print_replace (tree->root, fp_tex, code_error);
-        }
-        else
-        {
-            PRINT_TEX ("\\[f(x)=");
-            print_tex_node (tree->root, fp_tex, NULL, 0, code_error);
-            $$ ();
-            PRINT_TEX ("\\]\n");
-        }
+        PRINT_TEX ("Function:");
+        print_tex_tree (tree, fp_tex, 0, code_error);
 
+        print_tex_taylor (tree, fp_tex, 3, code_error);
         PRINT_TEX ("\\end{document}");
     }
 
     FCLOSE_ (fp_tex);
+}
+
+void print_tex_tree (TREE *tree, FILE *fp_tex, size_t n_diff, int *code_error)
+{
+    my_assert (tree != NULL, ERR_PTR);
+
+    if (tree->root->tree_size > STANDARD_SIZE_EXPR_TEX)
+    {
+        print_replace (tree->root, fp_tex, n_diff, code_error);
+        $$ ();
+    }
+    else
+    {
+        PRINT_TEX_PARAM ("\\[f^{(%d)}(x)=", n_diff);
+        print_tex_node (tree->root, fp_tex, NULL, 0, code_error);
+        $$ ();
+        PRINT_TEX ("\\]\n");
+    }
 }
 
 void print_tex_node (NODE *node, FILE *fp_tex, NODE **node_replace, size_t *pos_replace, int *code_error)
@@ -351,9 +367,9 @@ void print_tex_div (NODE *node, FILE *fp_tex, NODE** node_replace, size_t *pos_r
     my_assert (fp_tex != NULL, ERR_PTR);
 
     PRINT_TEX ("\\frac{");
-    print_tex_node (node, fp_tex, node_replace, pos_replace, code_error);
+    print_tex_node (node->left, fp_tex, node_replace, pos_replace, code_error);
     PRINT_TEX ("}{");
-    print_tex_node (node, fp_tex, node_replace, pos_replace, code_error);
+    print_tex_node (node->right, fp_tex, node_replace, pos_replace, code_error);
     PRINT_TEX ("}");
 }
 
@@ -365,7 +381,7 @@ void print_tex_operator (NODE *node, FILE *fp_tex, int *code_error)
     PRINT_TEX_PARAM ("%s", NAME_OP_TEX[node->data.types_op]);
 }
 
-void print_replace (NODE *node, FILE *fp_tex, int *code_error)
+void print_replace (NODE *node, FILE *fp_tex, size_t n_diff, int *code_error)
 {
     my_assert (node != NULL, ERR_PTR);
     my_assert (fp_tex != NULL, ERR_PTR);
@@ -379,9 +395,11 @@ void print_replace (NODE *node, FILE *fp_tex, int *code_error)
     get_node_replace (node, node_replace, &pos, code_error);
 
     pos = 0;
-    PRINT_TEX ("\\[f(x)=");
+    PRINT_TEX_PARAM ("\\[f^{(%d)}(x)=", n_diff);
     print_tex_node (node, fp_tex, node_replace, &pos, code_error);
     PRINT_TEX ("\\]\n");
+
+    PRINT_TEX ("Substitutions:\n");
 
     for (size_t i = 0; i < n_replace; i++)
     {
@@ -429,6 +447,32 @@ size_t get_n_replace (NODE *node)
     n_replace += get_n_replace (node->right);
 
     return n_replace;
+}
+
+void print_tex_taylor (TREE *tree, FILE *fp_tex, size_t n_pow, int *code_error)
+{
+    my_assert (fp_tex != NULL, ERR_PTR);
+
+    PRINT_TEX ("Taylor decomposition:\n");
+    PRINT_TEX ("\\[f(x)=");
+
+    PRINT_TEX ("f^{(0)}(x)");
+
+    for (size_t i = 1; i <= n_pow; i++)
+    {
+        PRINT_TEX_PARAM ("+ \\frac {1}{%d!} \\cdot f^{(%d)}(x)", i, i);
+    }
+
+    PRINT_TEX ("\\]\n");
+    PRINT_TEX ("Substitutions for Taylor:\n");
+    print_tex_tree (tree, fp_tex, 0, code_error);
+
+    for (size_t i = 1; i <= n_pow; i++)
+    {
+        n_diff (tree, 1, 0, code_error);
+        TREE_LOG (tree, *code_error);
+        print_tex_tree (tree, fp_tex, i, code_error);
+    }
 }
 
 #undef PRINT_TEX

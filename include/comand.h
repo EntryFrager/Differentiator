@@ -2,7 +2,7 @@ DEF_CMD(ADD, "+", "+")
 
 DEF_CMD(SUB, "-", "-")
 
-DEF_CMD(MUL, "*", "*")
+DEF_CMD(MUL, "*", " \\cdot ")
 
 DEF_CMD(DIV, "/", "/")
 

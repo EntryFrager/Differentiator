@@ -27,7 +27,6 @@
     {                                                                           \
         tree_dump_text (tree, &code_error, __FILE__, __func__, __LINE__);       \
         tree_dump_graph_viz (tree, __FILE__, __func__, __LINE__);               \
-        print_tex_tree (tree, &code_error);                                     \
     }
 
     #define assert_tree(tree, ret_value)                                                            \
@@ -171,13 +170,7 @@ int destroy_tree (TREE *tree, int *code_error);
 
     void tree_dump_html (TREE *tree, int *code_error);
 
-    void print_tex_tree (TREE *tree, int *code_error);
-
-    void print_tex_node (NODE *node, FILE *fp_tex, NODE **node_replace, size_t *pos_replace, int *code_error);
-
-    void print_tex_div (NODE *node, FILE *fp_tex, NODE** node_replace, size_t *pos_replace, int *code_error);
-
-    void print_tex_operator (NODE *node, FILE *fp_tex, int *code_error);
+    void print_tex (TREE *tree, int *code_error);
 #endif
 
 #endif //TREE_H

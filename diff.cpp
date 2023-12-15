@@ -220,7 +220,7 @@ NODE *tree_simplific (NODE *node, int *code_error)
     return node;
 }
 
-NODE *hanging_tree(NODE *node, NODE *hanging_node, NODE *parent, int *code_error)
+NODE *hanging_tree (NODE *node, NODE *hanging_node, NODE *parent, int *code_error)
 {
     my_assert (node != NULL, ERR_PTR);
     my_assert (hanging_node != NULL, ERR_PTR);

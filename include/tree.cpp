@@ -164,6 +164,8 @@ size_t get_tree_size (NODE *node)
 {
     IS_NODE_PTR_NULL (0);
 
+    node->tree_size = 0;
+
     node->tree_size += get_tree_size (node->left);
     node->tree_size += get_tree_size (node->right);
 
