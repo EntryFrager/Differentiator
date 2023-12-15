@@ -3,17 +3,20 @@
 
 #define IS_NODE_PTR_NULL(ret_value) if(!node) {return ret_value;}
 
-#define IF_NUM(node_type, expr) if (node_type == NUM) {expr; break;}
+#define IF_NUM(node_type, expr) if (node_type == NUM) {expr; return node;}
 
 #define NUM_(value, parent) create_node_num (value, NULL, NULL, parent, code_error)
 #define VAR_(str, parent) create_node_var (str, NULL, NULL, parent, code_error)
 #define OP_(types_op, l_side, r_side, parent) create_node_op (types_op, l_side, r_side, parent, code_error)
 
+#define is_zero(value) compare (value, 0) == 0
+#define is_one(value) compare (value, 1) == 0
+
 #define ADD_(node_1, node_2) create_node_op (ADD, node_1, node_2, NULL, code_error)
 #define SUB_(node_1, node_2) create_node_op (SUB, node_1, node_2, NULL, code_error)
 #define MUL_(node_1, node_2) create_node_op (MUL, node_1, node_2, NULL, code_error)
 #define DIV_(node_1, node_2) create_node_op (DIV, node_1, node_2, NULL, code_error)
-#define DEG_(node_1, deg) create_node_op (DEG, node_1, deg, NULL, code_error)
+#define POW_(node_1, deg) create_node_op (POW, node_1, deg, NULL, code_error)
 #define SIN_(node) create_node_op (SIN, NUM_(1, NULL), node, NULL, code_error)
 #define COS_(node) create_node_op (COS, NUM_(1, NULL), node, NULL, code_error)
 #define SQRT_(node) create_node_op (SQRT, NUM_(1, NULL), node, NULL, code_error)
@@ -36,5 +39,13 @@
 #define PRINT_CLOSE_BRACKET(stream) if (is_bracket) {fprintf (stream, ")"); is_bracket = false;}
 
 #define str_len(str) sizeof (str) - 1
+
+#define CUR_TOK token[*pos]
+#define IS_OP(type) CUR_TOK.data.types_op == type
+#define INCREM (*pos)++
+
+#define NAME_REPLACE(pos_replace) (char) 'A' + pos_replace
+
+#define PRINT_INFO fp_tex, node_replace, pos_replace, code_error
 
 #endif //DSL_H

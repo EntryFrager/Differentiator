@@ -26,8 +26,6 @@ char *get_str (FILE *stream, int *code_error);
 
 char *skip_isspace (char *str, int *code_error);
 
-bool is_zero (const double value, int *code_error);
-
 int compare_number (const double value_1, const double value_2, int *code_error);
 
 void clean_buffer ();

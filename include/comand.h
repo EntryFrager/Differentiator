@@ -6,7 +6,7 @@ DEF_CMD(MUL, "*", " \\cdot ")
 
 DEF_CMD(DIV, "/", "/")
 
-DEF_CMD(DEG, "^", "^")
+DEF_CMD(POW, "^", "^")
 
 DEF_CMD(OP_SEP, "", "")
 

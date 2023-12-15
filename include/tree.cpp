@@ -16,7 +16,7 @@ int create_tree (TREE *tree, int argc, char *argv[], int *code_error)
     my_assert (tree != NULL, ERR_PTR);
 
     tree->root = create_node_num (0, NULL, NULL, NULL, code_error);
-    $$ (ERR_NO);
+    ERR_RET (ERR_NO);
 
     tree->is_init = true;
 
@@ -59,7 +59,7 @@ NODE *calloc_node (NODE *left, NODE *right, NODE *parent, int *code_error)
 NODE *create_node_num (ELEMENT value, NODE *left, NODE *right, NODE *parent, int *code_error)
 {
     NODE *node = calloc_node (left, right, parent, code_error);
-    $$ (NULL);
+    ERR_RET (NULL);
     
     node->data.value = value;
     node->type       = NUM;
@@ -69,7 +69,7 @@ NODE *create_node_num (ELEMENT value, NODE *left, NODE *right, NODE *parent, int
 NODE *create_node_op (op_comand types_op, NODE *left, NODE *right, NODE *parent, int *code_error)
 {
     NODE *node = calloc_node (left, right, parent, code_error);
-    $$ (NULL);
+    ERR_RET (NULL);
 
     node->data.types_op = types_op;
     node->type          = OP;
@@ -80,7 +80,7 @@ NODE *create_node_op (op_comand types_op, NODE *left, NODE *right, NODE *parent,
 NODE *create_node_var (char *var, NODE *left, NODE *right, NODE *parent, int *code_error)
 {
     NODE *node = calloc_node (left, right, parent, code_error);
-    $$ (NULL);
+    ERR_RET (NULL);
 
     node->data.var = var;
     node->type     = VAR;
@@ -124,21 +124,21 @@ NODE *copy_tree (NODE *node, NODE *parent, int *code_error)
         case (NUM):
         {
             copy_node = create_node_num (node->data.value, NULL, NULL, parent, code_error);
-            $$ (NULL);
+            ERR_RET (NULL);
 
             break;
         }
         case (OP):
         {
             copy_node = create_node_op (node->data.types_op, NULL, NULL, parent, code_error);
-            $$ (NULL);
+            ERR_RET (NULL);
             
             break;
         }
         case (VAR):
         {
             copy_node = create_node_var (node->data.var, NULL, NULL, parent, code_error);
-            $$ (NULL);
+            ERR_RET (NULL);
 
             break;
         }
@@ -152,10 +152,10 @@ NODE *copy_tree (NODE *node, NODE *parent, int *code_error)
     copy_node->tree_size = node->tree_size;
 
     copy_node->left  = copy_tree (node->left, copy_node, code_error);
-    $$ (NULL);
+    ERR_RET (NULL);
 
     copy_node->right = copy_tree (node->right, copy_node, code_error);
-    $$(NULL);
+    ERR_RET (NULL);
 
     return copy_node;
 }
@@ -188,23 +188,24 @@ void print_tree (NODE *node, FILE *stream, int *code_error)
         case (NUM):
         {
             print_num (node, stream, code_error);
-            $$ ();
+            ERR_RET ();
 
             break;
         }
         case (VAR):
         {
             PRINT_NODE_PARAM ("%s", node->data.var);
+
             break;
         }
         case (OP):
         {
             print_operator (node, stream, code_error);
-            $$ ();
+            ERR_RET ();
 
             break;
         }
-        case (DEF_TYPE): {}
+        case (DEF_TYPE):
         default:
         {
             break;
@@ -237,10 +238,10 @@ void print_operator (NODE *node, FILE *stream, int *code_error)
     if (node->data.types_op < OP_SEP)
     {
         is_bracket = print_left_node_bracket (node, stream, code_error);
-        $$()
+        ERR_RET ();
 
         print_tree (node->left, stream, code_error);
-        $$ ();
+        ERR_RET ();
 
         PRINT_CLOSE_BRACKET (stream);
     }
@@ -248,9 +249,10 @@ void print_operator (NODE *node, FILE *stream, int *code_error)
     PRINT_NODE_PARAM ("%s", NAME_OP[node->data.types_op]);
 
     is_bracket = print_right_node_bracket (node, stream, code_error);
+    ERR_RET ();
 
     print_tree (node->right, stream, code_error);
-    $$ ();
+    ERR_RET ();
     
     PRINT_CLOSE_BRACKET (stream);
 }
@@ -261,7 +263,7 @@ bool print_left_node_bracket (NODE *node, FILE *stream, int *code_error)
     my_assert (stream != NULL, ERR_PTR);
 
     bool is_bracket = print_bracket (node, node->left, stream, code_error);
-    $$ (false);
+    ERR_RET (false);
 
     return is_bracket;
 }
@@ -281,7 +283,7 @@ bool print_right_node_bracket (NODE *node, FILE *stream, int *code_error)
     else 
     {
         is_bracket = print_bracket (node, node->right, stream, code_error);
-        $$ (false);
+        ERR_RET (false);
     }
 
     return is_bracket;
@@ -296,7 +298,7 @@ bool print_bracket (NODE *node, NODE *node_side, FILE *stream, int *code_error)
     {
         if (node_side->type == OP)
         {
-            if (node_side->data.types_op == DEG || node_side->data.types_op == ADD || node_side->data.types_op == SUB)
+            if (node_side->data.types_op == POW || node_side->data.types_op == ADD || node_side->data.types_op == SUB)
             {
                 PRINT_NODE ("(");
                 return true;
@@ -330,8 +332,15 @@ int destroy_tree (TREE *tree, int *code_error)
     tree->info.fp_name_expr = NULL;
     tree->info.size_file = 0;
 
+    free (tree->token);
     free (tree->info.buf);
-    tree->info.buf = NULL;
+    free (tree->table_name.vars);
+
+    tree->token            = NULL;
+    tree->info.buf         = NULL;
+    tree->table_name.vars  = NULL;
+    tree->n_token          = 0;
+    tree->table_name.n_var = 0;
 
 #ifdef DEBUG_TREE
     tree->info.fp_dump_text_name = NULL;

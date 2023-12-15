@@ -13,11 +13,9 @@
 
 #define DEBUG
 
-#undef $$
-//
 #ifdef DEBUG
     #define PRINT_ERROR() if (code_error != ERR_NO) my_strerr (code_error, stderr);
-    #define $$(ret_value) if (*code_error != 0) {return ret_value;}
+    #define ERR_RET(ret_value) if (*code_error != 0) {return ret_value;}
 #else
     #define PRINT_ERROR()
     #define $$(...)

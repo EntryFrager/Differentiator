@@ -43,7 +43,7 @@ char *get_str (FILE *stream, int *code_error)
 
     return str;
 }
-
+//len_STR
 char *skip_isspace (char *str, int *code_error)
 {
     my_assert (str != NULL, ERR_PTR);
@@ -70,13 +70,6 @@ char *skip_isspace (char *str, int *code_error)
     free (str);
 
     return new_str;
-}
-
-bool is_zero (const double value, int *code_error)
-{
-    my_assert (isfinite(value), ERR_NAN);
-
-    return (fabs (value) < EPSILON);
 }
 
 int compare_number (const double value_1, const double value_2, int *code_error)

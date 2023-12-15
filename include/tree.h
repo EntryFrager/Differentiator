@@ -48,7 +48,7 @@ enum op_comand {
     SUB,
     MUL,
     DIV,
-    DEG,
+    POW,
     OP_SEP,
     SIN,
     COS,
@@ -105,6 +105,10 @@ typedef struct {
 
     char *buf = NULL;
 
+    char *var_diff = NULL;
+    int pow_taylor = 0;
+    ELEMENT value_point = 0;
+
 #ifdef DEBUG
     const char *fp_dump_text_name = NULL;
     const char *fp_dot_name       = NULL;
@@ -115,7 +119,7 @@ typedef struct {
 } INFO;
 
 typedef struct {
-    NODE *root = NULL;
+    NODE *root = NULL; 
 
     TOKEN *token = NULL;
     size_t n_token = 0;
