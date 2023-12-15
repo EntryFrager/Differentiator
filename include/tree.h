@@ -81,6 +81,8 @@ typedef struct NODE {
     NODE *left   = NULL;
     NODE *right  = NULL;
     NODE *parent = NULL;
+    
+    size_t tree_size = 0;
 
     types type = DEF_TYPE;
     DATA data = {};
@@ -139,6 +141,8 @@ int delete_node (NODE *node);
 
 NODE *copy_tree (NODE *node, NODE *parent, int *code_error);
 
+size_t get_tree_size (NODE *node);
+
 void print_tree (NODE *node, FILE *stream, int *code_error);
 
 void print_num (NODE *node, FILE *stream, int *code_error);
@@ -169,9 +173,9 @@ int destroy_tree (TREE *tree, int *code_error);
 
     void print_tex_tree (TREE *tree, int *code_error);
 
-    NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error);
+    void print_tex_node (NODE *node, FILE *fp_tex, NODE **node_replace, size_t *pos_replace, int *code_error);
 
-    void print_tex_div (NODE *node, FILE *fp_tex, int *code_error);
+    void print_tex_div (NODE *node, FILE *fp_tex, NODE** node_replace, size_t *pos_replace, int *code_error);
 
     void print_tex_operator (NODE *node, FILE *fp_tex, int *code_error);
 #endif

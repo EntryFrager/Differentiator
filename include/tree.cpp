@@ -51,6 +51,7 @@ NODE *calloc_node (NODE *left, NODE *right, NODE *parent, int *code_error)
     node->left      = left;
     node->right     = right;
     node->parent    = parent;
+    node->tree_size = 0;
 
     return node;
 }
@@ -148,6 +149,8 @@ NODE *copy_tree (NODE *node, NODE *parent, int *code_error)
         }
     }
 
+    copy_node->tree_size = node->tree_size;
+
     copy_node->left  = copy_tree (node->left, copy_node, code_error);
     $$ (NULL);
 
@@ -155,6 +158,18 @@ NODE *copy_tree (NODE *node, NODE *parent, int *code_error)
     $$(NULL);
 
     return copy_node;
+}
+
+size_t get_tree_size (NODE *node)
+{
+    IS_NODE_PTR_NULL (0);
+
+    node->tree_size += get_tree_size (node->left);
+    node->tree_size += get_tree_size (node->right);
+
+    node->tree_size += 1;
+
+    return node->tree_size;
 }
 
 #define PRINT_NODE(str) fprintf (stream, str);

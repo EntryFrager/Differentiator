@@ -27,6 +27,8 @@ DEF_ERR ("pointer to tree structure null")
 
 DEF_ERR ("the tree was not initialized")
 
+DEF_ERR ("error when counting the number of variables")
+
 DEF_ERR ("invalid pointer to tree root")
 
 DEF_ERR ("communication between nodes is broken")

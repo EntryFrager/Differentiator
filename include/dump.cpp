@@ -1,5 +1,7 @@
 #include "tree.h"
-//name_tex
+
+#ifdef DEBUG_TREE
+
 #define DEF_CMD(num, name, name_tex) name_tex,
 
 static const char *NAME_OP_TEX[] = {
@@ -8,10 +10,13 @@ static const char *NAME_OP_TEX[] = {
 
 #undef DEF_CMD
 
-#ifdef DEBUG_TREE
+static const size_t STANDARD_SIZE_EXPR_TEX = 10;
 
 static void print_tree_dump (NODE *node, FILE *stream);
 static int create_node_dot (NODE *node, FILE *stream, int ip_parent, int ip);
+static void print_replace (NODE *node, FILE *fp_tex, int *code_error);
+static void get_node_replace (NODE *node, NODE **node_replace, size_t *pos_replace, int *code_error);
+static size_t get_n_replace (NODE *node);
 
 #define DUMP_LOG(str) fprintf (fp_err, str "\n");
 #define DUMP_LOG_PARAM(str, ...) fprintf (fp_err, str "\n", __VA_ARGS__);
@@ -246,30 +251,49 @@ void print_tex_tree (TREE *tree, int *code_error)
                          "\\author{Pavlov Matvey}\n"
                          "\\date{\\today}\n"
                          "\\begin{document}\n"
-                         "\\maketitle\n"
-                         "\\[");
+                         "\\maketitle\n");
 
-        print_tex_node (tree->root, fp_tex, code_error);
-        $$ ()
+        if (tree->root->tree_size > STANDARD_SIZE_EXPR_TEX)
+        {
+            print_replace (tree->root, fp_tex, code_error);
+        }
+        else
+        {
+            PRINT_TEX ("\\[f(x)=");
+            print_tex_node (tree->root, fp_tex, NULL, 0, code_error);
+            $$ ();
+            PRINT_TEX ("\\]\n");
+        }
 
-        PRINT_TEX ("\\]\n"
-                          "\\end{document}");
+        PRINT_TEX ("\\end{document}");
     }
 
     FCLOSE_ (fp_tex);
 }
 
-NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
+void print_tex_node (NODE *node, FILE *fp_tex, NODE **node_replace, size_t *pos_replace, int *code_error)
 {
     my_assert (fp_tex != NULL, ERR_PTR);
-    IS_NODE_PTR_NULL (NULL);
+    IS_NODE_PTR_NULL ();
+
+    if (node_replace != NULL)
+    {
+        if (node_replace[*pos_replace] == node)
+        {
+            char name_replace = (char) (65 + (int) (*pos_replace));
+            PRINT_TEX_PARAM ("%c", name_replace);
+            *pos_replace += 1;
+
+            return;
+        }
+    }
 
     switch (node->type)
     {
         case (NUM):
         {
             print_num (node, fp_tex, code_error);
-            $$ (NULL);
+            $$ ();
 
             break;
         }
@@ -282,8 +306,8 @@ NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
         {
             if (node->data.types_op == DIV)
             {
-                print_tex_div (node, fp_tex, code_error);
-                 (NULL);
+                print_tex_div (node, fp_tex, node_replace, pos_replace, code_error);
+                $$ ();
             }
             else
             {
@@ -292,10 +316,10 @@ NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
                 if (node->data.types_op < OP_SEP)
                 {
                     is_bracket = print_left_node_bracket (node, fp_tex, code_error);
-                    $$ (NULL);
+                    $$ ();
                     
-                    print_tex_node (node->left, fp_tex, code_error);
-                    $$ (NULL);
+                    print_tex_node (node->left, fp_tex, node_replace, pos_replace, code_error);
+                    $$ ();
 
                     PRINT_CLOSE_BRACKET (fp_tex);
                 }
@@ -303,10 +327,10 @@ NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
                 print_tex_operator (node, fp_tex, code_error);
                 
                 is_bracket = print_right_node_bracket (node, fp_tex, code_error);
-                $$ (NULL);
+                $$ ();
 
-                print_tex_node (node->right, fp_tex, code_error);
-                $$ (NULL);
+                print_tex_node (node->right, fp_tex, node_replace, pos_replace, code_error);
+                $$ ();
 
                 PRINT_CLOSE_BRACKET (fp_tex);
             }
@@ -319,19 +343,17 @@ NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
             break;
         }
     }
-
-    return node;
 }
 
-void print_tex_div (NODE *node, FILE *fp_tex, int *code_error)
+void print_tex_div (NODE *node, FILE *fp_tex, NODE** node_replace, size_t *pos_replace, int *code_error)
 {
     my_assert (node != NULL, ERR_PTR);
     my_assert (fp_tex != NULL, ERR_PTR);
 
     PRINT_TEX ("\\frac{");
-    print_tex_node (node->left, fp_tex, code_error);
+    print_tex_node (node, fp_tex, node_replace, pos_replace, code_error);
     PRINT_TEX ("}{");
-    print_tex_node (node->right, fp_tex, code_error);
+    print_tex_node (node, fp_tex, node_replace, pos_replace, code_error);
     PRINT_TEX ("}");
 }
 
@@ -341,6 +363,72 @@ void print_tex_operator (NODE *node, FILE *fp_tex, int *code_error)
     my_assert (fp_tex != NULL, ERR_PTR);
 
     PRINT_TEX_PARAM ("%s", NAME_OP_TEX[node->data.types_op]);
+}
+
+void print_replace (NODE *node, FILE *fp_tex, int *code_error)
+{
+    my_assert (node != NULL, ERR_PTR);
+    my_assert (fp_tex != NULL, ERR_PTR);
+
+    size_t n_replace = get_n_replace (node);
+
+    NODE **node_replace = (NODE **) calloc (n_replace, sizeof (NODE *));
+    my_assert (node_replace != NULL, ERR_MEM);
+
+    size_t pos = 0;
+    get_node_replace (node, node_replace, &pos, code_error);
+
+    pos = 0;
+    PRINT_TEX ("\\[f(x)=");
+    print_tex_node (node, fp_tex, node_replace, &pos, code_error);
+    PRINT_TEX ("\\]\n");
+
+    for (size_t i = 0; i < n_replace; i++)
+    {
+        char name_replace = (char) (65 + (int) i);
+        PRINT_TEX_PARAM ("\\[%c=", name_replace);
+        print_tex_node (node_replace[i], fp_tex, NULL, 0, code_error);
+        PRINT_TEX ("\\]\n");
+    }
+
+    free (node_replace);
+}
+
+void get_node_replace (NODE *node, NODE **node_replace, size_t *pos_replace, int *code_error)
+{
+    IS_NODE_PTR_NULL ();
+
+    if (node->tree_size > STANDARD_SIZE_EXPR_TEX && 
+        node->left->tree_size < STANDARD_SIZE_EXPR_TEX &&
+        node->right->tree_size < STANDARD_SIZE_EXPR_TEX)
+    {
+        node_replace[*pos_replace] = node;
+        *pos_replace += 1;
+
+        return;
+    }
+
+    get_node_replace (node->left, node_replace, pos_replace, code_error);
+    get_node_replace (node->right, node_replace, pos_replace, code_error);
+}
+
+size_t get_n_replace (NODE *node)
+{
+    IS_NODE_PTR_NULL (0);
+
+    size_t n_replace = 0;
+
+    if (node->tree_size > STANDARD_SIZE_EXPR_TEX && 
+        node->left->tree_size < STANDARD_SIZE_EXPR_TEX &&
+        node->right->tree_size < STANDARD_SIZE_EXPR_TEX)
+    {
+        return 1;
+    }
+
+    n_replace += get_n_replace (node->left);
+    n_replace += get_n_replace (node->right);
+
+    return n_replace;
 }
 
 #undef PRINT_TEX

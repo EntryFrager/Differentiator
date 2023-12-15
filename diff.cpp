@@ -6,7 +6,7 @@ NODE *n_diff (TREE *tree, size_t n, size_t n_var, int *code_error)
 
     if (n_var > tree->table_name.n_var)
     {
-        code_error |= TREE_ERR_N_VAR;
+        *code_error |= TREE_ERR_N_VAR;
         $$ (NULL);
     }
 
@@ -20,6 +20,8 @@ NODE *n_diff (TREE *tree, size_t n, size_t n_var, int *code_error)
 
         set_parent (tree->root, NULL);
     }
+    
+    tree->root->tree_size = get_tree_size (tree->root);
 
     return tree->root;
 }

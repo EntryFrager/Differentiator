@@ -20,6 +20,7 @@ int input_expr (TREE *tree, int *code_error)
     my_assert (tree->info.fp_expr != NULL, ERR_FOPEN);
 
     tree->info.size_file = get_file_size (tree->info.fp_expr, code_error);
+    $$ (*code_error);
 
     tree->info.buf = (char *) calloc (tree->info.size_file + 1, sizeof (char));
     my_assert (tree->info.buf != NULL, ERR_MEM);
@@ -32,14 +33,18 @@ int input_expr (TREE *tree, int *code_error)
     FCLOSE_ (tree->info.fp_expr);
 
     tree->info.buf = skip_isspace (tree->info.buf, code_error);
+    $$ (*code_error);
     get_token (tree, code_error);
+    $$ (*code_error);
     
     tree->root = get_expr (tree->token, code_error);
+    $$ (*code_error);
     tree->root = set_parent (tree->root, NULL);
+    $$ (*code_error);
+    
+    tree->root->tree_size = get_tree_size (tree->root);
 
     assert_tree (tree, ERR_TREE);
-
-    $$ (*code_error);
 
     return ERR_NO;
 }
@@ -202,16 +207,13 @@ NODE *get_expr (TOKEN *token, int *code_error)
 {
     my_assert (token != NULL, ERR_PTR);
 
-    size_t *pos = (size_t *) calloc (1, sizeof (size_t));
-    my_assert (pos != NULL, ERR_MEM);
+    size_t pos = 0;
 
-    NODE *node = get_add_sub (token, pos, code_error);
+    NODE *node = get_add_sub (token, &pos, code_error);
 
-    syntax_assert (token[*pos].type == DEF_TYPE);
+    syntax_assert (token[pos].type == DEF_TYPE);
 
     $$ (NULL);
-
-    free (pos);
 
     return node;
 }
@@ -260,7 +262,7 @@ NODE *get_add_sub (TOKEN *token, size_t *pos, int *code_error)
         }
     }
 
-    $$( NULL);
+    $$ (NULL);
 
     return node;
 }
@@ -309,7 +311,7 @@ NODE *get_mul_div (TOKEN *token, size_t *pos, int *code_error)
         }
     }
 
-    $$( NULL);
+    $$ (NULL);
 
     return node;
 }
