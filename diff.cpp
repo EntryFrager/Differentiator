@@ -1,16 +1,22 @@
 #include "diff.h"
 
-NODE *n_diff (TREE *tree, size_t n, int *code_error)
+NODE *n_diff (TREE *tree, size_t n, size_t n_var, int *code_error)
 {
     my_assert (tree->root != NULL, ERR_PTR);
 
+    if (n_var > tree->table_name.n_var)
+    {
+        code_error |= TREE_ERR_N_VAR;
+        $$ (NULL);
+    }
+
     for (size_t i = 0; i < n; i++)
     {
-        tree->root = diff (tree->root, code_error);
+        tree->root = diff (tree->root, tree->table_name.vars[n_var], code_error);
 
         tree->root = tree_simplific (tree->root, code_error);
 
-        $$(NULL);
+        $$ (NULL);
 
         set_parent (tree->root, NULL);
     }
@@ -18,7 +24,7 @@ NODE *n_diff (TREE *tree, size_t n, int *code_error)
     return tree->root;
 }
 
-NODE *diff (NODE *node, int *code_error)
+NODE *diff (NODE *node, char *var, int *code_error)
 {
     IS_NODE_PTR_NULL (NULL);
 
@@ -30,7 +36,14 @@ NODE *diff (NODE *node, int *code_error)
         }
         case (VAR):
         {
-            return NUM_(1, NULL);
+            if (strcmp (node->data.var, var) == 0)
+            {
+                return NUM_(1, NULL);
+            }
+            else
+            {
+                return NUM_(0, NULL);
+            }
         }
         case (OP):
         {
@@ -200,7 +213,7 @@ NODE *tree_simplific (NODE *node, int *code_error)
         }
     }
 
-    $$(NULL);
+    $$ (NULL);
 
     return node;
 }
@@ -235,7 +248,7 @@ NODE *hanging_tree(NODE *node, NODE *hanging_node, NODE *parent, int *code_error
 
     free (node);
 
-    $$(NULL);
+    $$ (NULL);
 
     return hanging_node;
 }
@@ -243,7 +256,7 @@ NODE *hanging_tree(NODE *node, NODE *hanging_node, NODE *parent, int *code_error
 ELEMENT eval_tree (NODE *node, ELEMENT var_value, int *code_error)
 {
     IS_NODE_PTR_NULL (ERR_NO);
-    $$(*code_error);
+    $$ (*code_error);
 
     switch (node->type)
     {

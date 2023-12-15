@@ -16,7 +16,7 @@ int create_tree (TREE *tree, int argc, char *argv[], int *code_error)
     my_assert (tree != NULL, ERR_PTR);
 
     tree->root = create_node_num (0, NULL, NULL, NULL, code_error);
-    $$(ERR_NO);
+    $$ (ERR_NO);
 
     tree->is_init = true;
 
@@ -58,7 +58,7 @@ NODE *calloc_node (NODE *left, NODE *right, NODE *parent, int *code_error)
 NODE *create_node_num (ELEMENT value, NODE *left, NODE *right, NODE *parent, int *code_error)
 {
     NODE *node = calloc_node (left, right, parent, code_error);
-    $$(NULL);
+    $$ (NULL);
     
     node->data.value = value;
     node->type       = NUM;
@@ -68,7 +68,7 @@ NODE *create_node_num (ELEMENT value, NODE *left, NODE *right, NODE *parent, int
 NODE *create_node_op (op_comand types_op, NODE *left, NODE *right, NODE *parent, int *code_error)
 {
     NODE *node = calloc_node (left, right, parent, code_error);
-    $$(NULL);
+    $$ (NULL);
 
     node->data.types_op = types_op;
     node->type          = OP;
@@ -79,7 +79,7 @@ NODE *create_node_op (op_comand types_op, NODE *left, NODE *right, NODE *parent,
 NODE *create_node_var (char *var, NODE *left, NODE *right, NODE *parent, int *code_error)
 {
     NODE *node = calloc_node (left, right, parent, code_error);
-    $$(NULL);
+    $$ (NULL);
 
     node->data.var = var;
     node->type     = VAR;
@@ -123,21 +123,21 @@ NODE *copy_tree (NODE *node, NODE *parent, int *code_error)
         case (NUM):
         {
             copy_node = create_node_num (node->data.value, NULL, NULL, parent, code_error);
-            $$(NULL);
+            $$ (NULL);
 
             break;
         }
         case (OP):
         {
             copy_node = create_node_op (node->data.types_op, NULL, NULL, parent, code_error);
-            $$(NULL);
+            $$ (NULL);
             
             break;
         }
         case (VAR):
         {
             copy_node = create_node_var (node->data.var, NULL, NULL, parent, code_error);
-            $$(NULL);
+            $$ (NULL);
 
             break;
         }
@@ -149,7 +149,7 @@ NODE *copy_tree (NODE *node, NODE *parent, int *code_error)
     }
 
     copy_node->left  = copy_tree (node->left, copy_node, code_error);
-    $$(NULL);
+    $$ (NULL);
 
     copy_node->right = copy_tree (node->right, copy_node, code_error);
     $$(NULL);
@@ -264,7 +264,7 @@ bool print_right_node_bracket (NODE *node, FILE *stream, int *code_error)
     else 
     {
         is_bracket = print_bracket (node, node->right, stream, code_error);
-        $$(false);
+        $$ (false);
     }
 
     return is_bracket;
@@ -336,7 +336,7 @@ int tree_verificator (TREE *tree)
 
     VERIF_EXPR (tree != NULL, TREE_ERR_PTR)
 
-    VERIF_EXPR (tree->is_init == true, TREE_INIT)
+    VERIF_EXPR (tree->is_init == true, TREE_NOT_INIT)
 
     VERIF_EXPR (tree->root != NULL, TREE_ERR_ROOT_PTR)
 

@@ -1,7 +1,8 @@
 #include "input.h"
 
-static TOKEN *get_token (char *str, int *code_error);
+static void get_token (TREE *tree, int *code_error);
 static size_t get_n_tokens (char *str, int *code_error);
+static void get_table_name (TREE *tree, int *code_error);
 static NODE *get_add_sub (TOKEN *token, size_t *pos, int *code_error);
 static NODE *get_mul_div (TOKEN *token, size_t *pos, int *code_error);
 static NODE *get_pow (TOKEN *token, size_t *pos, int *code_error);
@@ -31,39 +32,43 @@ int input_expr (TREE *tree, int *code_error)
     FCLOSE_ (tree->info.fp_expr);
 
     tree->info.buf = skip_isspace (tree->info.buf, code_error);
-    tree->token = get_token (tree->info.buf, code_error);
+    get_token (tree, code_error);
     
     tree->root = get_expr (tree->token, code_error);
     tree->root = set_parent (tree->root, NULL);
 
     assert_tree (tree, ERR_TREE);
 
-    $$(*code_error);
+    $$ (*code_error);
 
     return ERR_NO;
 }
 
-TOKEN *get_token (char *str, int *code_error)
+void get_token (TREE *tree, int *code_error)
 {
-    my_assert (str != NULL, ERR_PTR);
+    my_assert (tree != NULL, ERR_PTR);
+    
+    char *str = tree->info.buf;
 
-    size_t n_token = get_n_tokens (str, code_error);
-    TOKEN *token = (TOKEN *) calloc (n_token + 1, sizeof (TOKEN));
-    my_assert (token != NULL, ERR_MEM);
+    tree->n_token = get_n_tokens (str, code_error);
+    $$ ();
+
+    tree->token = (TOKEN *) calloc (tree->n_token + 1, sizeof (TOKEN));
+    my_assert (tree->token != NULL, ERR_MEM);
 
     op_comand op = OP_NO;
 
-    for (size_t i = 0; i < n_token; i++)
+    for (size_t i = 0; i < tree->n_token; i++)
     {
         if ((op = is_func (&str, code_error)) != OP_NO)
         {
-            token[i].type = OP;
-            token[i].data.types_op = op;
+            tree->token[i].type = OP;
+            tree->token[i].data.types_op = op;
         }
         else if (isdigit (*str))
         {
-            token[i].type = NUM;
-            token[i].data.var = str;
+            tree->token[i].type = NUM;
+            tree->token[i].data.var = str;
 
             while (isdigit (*str))
             {
@@ -72,8 +77,9 @@ TOKEN *get_token (char *str, int *code_error)
         }
         else if (isalpha (*str))
         {
-            token[i].type = VAR;
-            token[i].data.var = str;
+            tree->token[i].type = VAR;
+            tree->token[i].data.var = str;
+            tree->table_name.n_var++;
             
             while (isalpha (*str))
             {
@@ -82,43 +88,43 @@ TOKEN *get_token (char *str, int *code_error)
         }
         else
         {
-            token[i].type = OP;
+            tree->token[i].type = OP;
 
             switch (*str)
             {
                 case ('+'):
                 {
-                    token[i].data.types_op = ADD;
+                    tree->token[i].data.types_op = ADD;
                     break;
                 }
                 case ('-'):
                 {
-                    token[i].data.types_op = SUB;
+                    tree->token[i].data.types_op = SUB;
                     break;
                 }
                 case ('*'):
                 {
-                    token[i].data.types_op = MUL;
+                    tree->token[i].data.types_op = MUL;
                     break;
                 }
                 case ('/'):
                 {
-                    token[i].data.types_op = DIV;
+                    tree->token[i].data.types_op = DIV;
                     break;
                 }
                 case ('^'):
                 {
-                    token[i].data.types_op = DEG;
+                    tree->token[i].data.types_op = DEG;
                     break;
                 }
                 case ('('):
                 {
-                    token[i].data.types_op = OPEN_BRACKET;
+                    tree->token[i].data.types_op = OPEN_BRACKET;
                     break;
                 }
                 case (')'):
                 {
-                    token[i].data.types_op = CLOSE_BRACKET;
+                    tree->token[i].data.types_op = CLOSE_BRACKET;
                     break;
                 }
                 default:
@@ -131,9 +137,9 @@ TOKEN *get_token (char *str, int *code_error)
         }
     }
 
-    token[n_token].type = DEF_TYPE;
+    tree->token[tree->n_token].type = DEF_TYPE;
 
-    return token;
+    get_table_name (tree, code_error);
 }
 
 size_t get_n_tokens (char *str, int *code_error)
@@ -154,11 +160,42 @@ size_t get_n_tokens (char *str, int *code_error)
         else if (isdigit (*str) || isalpha (*str))
         {
             n_tokens++;
-            str++;
+
+            while (isdigit (*str) || isalpha (*str))
+            {
+                str++;
+            }
         }
     }
     
     return n_tokens;
+}
+
+void get_table_name (TREE *tree, int *code_error)
+{
+    my_assert (tree != NULL, ERR_MEM);
+
+    tree->table_name.vars = (char **) calloc (tree->table_name.n_var, sizeof (char *));
+    my_assert (tree->table_name.vars != NULL, ERR_MEM);
+
+    for (size_t i = 0; i < tree->n_token; i++)
+    {
+        if (tree->token[i].type == VAR)
+        {
+            for (size_t var_pos = 0; var_pos < tree->table_name.n_var; var_pos++)
+            {
+                if (tree->table_name.vars[var_pos] == NULL)
+                {
+                    tree->table_name.vars[var_pos] = tree->token[i].data.var;
+                    break;
+                }
+                else if (strcmp (tree->table_name.vars[var_pos], tree->token[i].data.var) == 0)
+                {
+                    break;
+                }
+            }
+        }
+    }
 }
 
 NODE *get_expr (TOKEN *token, int *code_error)
@@ -172,7 +209,7 @@ NODE *get_expr (TOKEN *token, int *code_error)
 
     syntax_assert (token[*pos].type == DEF_TYPE);
 
-    $$(NULL);
+    $$ (NULL);
 
     free (pos);
 
@@ -223,7 +260,7 @@ NODE *get_add_sub (TOKEN *token, size_t *pos, int *code_error)
         }
     }
 
-    $$(NULL);
+    $$( NULL);
 
     return node;
 }
@@ -272,7 +309,7 @@ NODE *get_mul_div (TOKEN *token, size_t *pos, int *code_error)
         }
     }
 
-    $$(NULL);
+    $$( NULL);
 
     return node;
 }
@@ -294,7 +331,7 @@ NODE *get_pow (TOKEN *token, size_t *pos, int *code_error)
         node = create_node_op (DEG, node_l, node_r, NULL, code_error);
     }
 
-    $$(NULL);
+    $$ (NULL);
 
     return node;
 }
@@ -313,12 +350,12 @@ NODE *get_bracket (TOKEN *token, size_t *pos, int *code_error)
 
         (*pos)++;
 
-        $$(NULL);
+        $$ (NULL);
 
         return node;
     }
 
-    $$(NULL);
+    $$ (NULL);
 
     return get_trig (token, pos, code_error);
 }
@@ -332,7 +369,7 @@ NODE *get_trig (TOKEN *token, size_t *pos, int *code_error)
         op_comand op = token[(*pos)++].data.types_op;
 
         NODE *node_r = get_bracket (token, pos, code_error);
-        $$(NULL);
+        $$ (NULL);
         
         switch (op)
         {

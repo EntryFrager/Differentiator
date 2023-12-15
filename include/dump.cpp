@@ -250,7 +250,7 @@ void print_tex_tree (TREE *tree, int *code_error)
                          "\\[");
 
         print_tex_node (tree->root, fp_tex, code_error);
-        $$()
+        $$ ()
 
         PRINT_TEX ("\\]\n"
                           "\\end{document}");
@@ -283,7 +283,7 @@ NODE *print_tex_node (NODE *node, FILE *fp_tex, int *code_error)
             if (node->data.types_op == DIV)
             {
                 print_tex_div (node, fp_tex, code_error);
-                $$(NULL);
+                 (NULL);
             }
             else
             {

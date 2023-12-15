@@ -92,6 +92,11 @@ typedef struct TOKEN {
 } TOKEN;
 
 typedef struct {
+    char **vars = NULL;
+    size_t n_var = 0;
+} TABLE_NAME;
+
+typedef struct {
     const char *fp_name_expr = NULL;
     FILE *fp_expr      = NULL;
 
@@ -110,13 +115,14 @@ typedef struct {
 
 typedef struct {
     NODE *root = NULL;
-    char **vars = NULL;
 
     TOKEN *token = NULL;
+    size_t n_token = 0;
 
     bool is_init = false;
 
     INFO info = {};
+    TABLE_NAME table_name = {};
 } TREE;
 
 int create_tree (TREE *tree, int argc, char *argv[], int *code_error);

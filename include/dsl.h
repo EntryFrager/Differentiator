@@ -19,8 +19,8 @@
 #define SQRT_(node) create_node_op (SQRT, NUM_(1, NULL), node, NULL, code_error)
 #define LN_(node) create_node_op (LN, NUM_(1, NULL), node, NULL, code_error)
 
-#define DIF_L diff (node->left, code_error)
-#define DIF_R diff (node->right, code_error)
+#define DIF_L diff (node->left, var, code_error)
+#define DIF_R diff (node->right, var, code_error)
 
 #define COPY_L copy_tree (node->left, NULL, code_error)
 #define COPY_R copy_tree (node->right, NULL, code_error)

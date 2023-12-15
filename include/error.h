@@ -43,13 +43,14 @@ enum code_error {                               ///< Error codes.
     ERR_TREE          = 1 << 10,
 
     TREE_ERR_PTR      = 1 << 11,
-    TREE_INIT         = 1 << 12,
+    TREE_NOT_INIT     = 1 << 12,
     TREE_ERR_ROOT_PTR = 1 << 13,
+    TREE_ERR_N_VAR    = 1 << 14,
     
-    NODE_ERR          = 1 << 14,
-    NODE_DATA_ERR_PTR = 1 << 15,
+    NODE_ERR          = 1 << 15,
+    NODE_DATA_ERR_PTR = 1 << 16,
 
-    ERR_CNT           = 16
+    ERR_CNT           = 17
 };
 
 void my_strerr (unsigned code_error, FILE *stream);    ///< Error print function.
