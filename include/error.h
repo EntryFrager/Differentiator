@@ -22,7 +22,7 @@
 #endif
 
 #define my_assert(expr, cd_err) if (!(expr)) {  \
-        fprintf(stderr, "\x1b[31m%s %s:%d: My assertion failed: \"" #expr "\"\x1b[0m\n", __FILE__, __func__, __LINE__); \
+        fprintf (stderr, "\x1b[31m%s %s:%d: My assertion failed: \"" #expr "\"\x1b[0m\n", __FILE__, __func__, __LINE__); \
         *code_error |= cd_err;  \
     }
 

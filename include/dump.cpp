@@ -11,7 +11,7 @@ static const char *NAME_OP_TEX[] = {
 
 #undef DEF_CMD
 
-static const size_t STANDARD_SIZE_EXPR_TEX = 50;
+static const size_t STANDARD_SIZE_EXPR_TEX = 20;
 
 static void print_tex_tree (TREE *tree, FILE *fp_tex, size_t n_diff, int *code_error);
 static void print_tex_node (NODE *node, FILE *fp_tex, NODE **node_replace, size_t *pos_replace, int *code_error);
@@ -254,7 +254,7 @@ void print_tex (TREE *tree, int *code_error)
     if (fp_tex != NULL)
     {
         PRINT_TEX ("\\documentclass[12pt, letterpaper]{article}\n"
-                    "\\title {Deriving the derivative of a given expression}\n"
+                    "\\title {Study of the function, the value at a point and its Taylor expansion}\n"
                     "\\author{Pavlov Matvey}\n"
                     "\\date{\\today}\n"
                     "\\begin{document}\n"
@@ -266,7 +266,7 @@ void print_tex (TREE *tree, int *code_error)
         PRINT_TEX_PARAM ("Function value at a point $%s=%lg$: \\[f(%lg)=%lg\\]\n", 
                          tree->info.var_diff, tree->info.value_point, tree->info.value_point,  
                          eval_tree (tree->root, tree->info.value_point, code_error));
-
+        
         print_tex_taylor (tree, fp_tex, code_error);
         PRINT_TEX ("\\end{document}");
     }
@@ -423,12 +423,14 @@ void print_replace (NODE *node, FILE *fp_tex, size_t n_diff, int *code_error)
     ERR_RET ();
     PRINT_TEX ("\\]\n");
 
-    PRINT_TEX ("Substitutions:\n");
+    if (n_replace > 0)
+    {
+        PRINT_TEX ("Substitutions:\n");
+    }
 
     for (size_t i = 0; i < n_replace; i++)
     {
         PRINT_TEX_PARAM ("\\[%c=", NAME_REPLACE (i));
-
         print_tex_node (node_replace[i], fp_tex, NULL, 0, code_error);
         ERR_RET ();
 
@@ -442,11 +444,14 @@ void get_node_replace (NODE *node, NODE **node_replace, size_t *pos_replace, int
 {
     IS_NODE_PTR_NULL ();
 
+    get_node_replace (node->left, node_replace, pos_replace, code_error);
+    get_node_replace (node->right, node_replace, pos_replace, code_error);
+
     if (node->parent != NULL)
     {
-        if (node->tree_size > STANDARD_SIZE_EXPR_TEX && 
-            node->left->tree_size < STANDARD_SIZE_EXPR_TEX &&
-            node->right->tree_size < STANDARD_SIZE_EXPR_TEX)
+        if (node->tree_size >= STANDARD_SIZE_EXPR_TEX && 
+            node->left->tree_size <= STANDARD_SIZE_EXPR_TEX &&
+            node->right->tree_size <= STANDARD_SIZE_EXPR_TEX)
         {
             node_replace[*pos_replace] = node;
             *pos_replace += 1;
@@ -454,9 +459,6 @@ void get_node_replace (NODE *node, NODE **node_replace, size_t *pos_replace, int
             return;
         }
     }
-
-    get_node_replace (node->left, node_replace, pos_replace, code_error);
-    get_node_replace (node->right, node_replace, pos_replace, code_error);
 }
 
 size_t get_n_replace (NODE *node)
@@ -465,19 +467,19 @@ size_t get_n_replace (NODE *node)
 
     size_t n_replace = 0;
 
+    n_replace += get_n_replace (node->left);
+    n_replace += get_n_replace (node->right);
+
     if (node->parent != NULL)
     {
-        if (node->tree_size > STANDARD_SIZE_EXPR_TEX && 
-            node->left->tree_size < STANDARD_SIZE_EXPR_TEX &&
-            node->right->tree_size < STANDARD_SIZE_EXPR_TEX)
+        if (node->tree_size >= STANDARD_SIZE_EXPR_TEX && 
+            node->left->tree_size <= STANDARD_SIZE_EXPR_TEX &&
+            node->right->tree_size <= STANDARD_SIZE_EXPR_TEX)
         {
             return 1;
         }
     }
-
-    n_replace += get_n_replace (node->left);
-    n_replace += get_n_replace (node->right);
-
+    
     return n_replace;
 }
 
@@ -507,8 +509,6 @@ void print_tex_taylor (TREE *tree, FILE *fp_tex, int *code_error)
     {
         n_diff (tree, 1, code_error);
         ERR_RET ();
-        
-        TREE_LOG (tree, *code_error);
 
         print_tex_tree (tree, fp_tex, i, code_error);
         ERR_RET ();

@@ -7,7 +7,7 @@
 
 #define NUM_(value, parent) create_node_num (value, NULL, NULL, parent, code_error)
 #define VAR_(str, parent) create_node_var (str, NULL, NULL, parent, code_error)
-#define OP_(types_op, l_side, r_side, parent) create_node_op (types_op, l_side, r_side, parent, code_error)
+#define OP_(types_op, parent) create_node_op (types_op, NULL, NULL, parent, code_error)
 
 #define is_zero(value) compare (value, 0) == 0
 #define is_one(value) compare (value, 1) == 0

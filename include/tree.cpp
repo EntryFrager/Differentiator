@@ -15,7 +15,7 @@ int create_tree (TREE *tree, int argc, char *argv[], int *code_error)
 {
     my_assert (tree != NULL, ERR_PTR);
 
-    tree->root = create_node_num (0, NULL, NULL, NULL, code_error);
+    tree->root = calloc_node (NULL, NULL, NULL, code_error);
     ERR_RET (ERR_NO);
 
     tree->is_init = true;
@@ -123,26 +123,26 @@ NODE *copy_tree (NODE *node, NODE *parent, int *code_error)
     {
         case (NUM):
         {
-            copy_node = create_node_num (node->data.value, NULL, NULL, parent, code_error);
+            copy_node = NUM_ (node->data.value, parent);
             ERR_RET (NULL);
 
             break;
         }
         case (OP):
         {
-            copy_node = create_node_op (node->data.types_op, NULL, NULL, parent, code_error);
+            copy_node = OP_ (node->data.types_op, parent);
             ERR_RET (NULL);
             
             break;
         }
         case (VAR):
         {
-            copy_node = create_node_var (node->data.var, NULL, NULL, parent, code_error);
+            copy_node = VAR_ (node->data.var, parent);
             ERR_RET (NULL);
 
             break;
         }
-        case (DEF_TYPE): {}
+        case (DEF_TYPE):
         default:
         {
             break;

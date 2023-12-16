@@ -196,41 +196,6 @@ NODE *tree_simplific (NODE *node, int *code_error)
     return node;
 }
 
-NODE *hanging_tree (NODE *node, NODE *hanging_node, NODE *parent, int *code_error)
-{
-    my_assert (node != NULL, ERR_PTR);
-    my_assert (hanging_node != NULL, ERR_PTR);
-
-    if (parent != NULL)
-    {
-        if (parent->left == node)
-        {
-            parent->left = hanging_node;
-        }
-        else if (parent->right == node)
-        {
-            parent->right = hanging_node;
-        }
-    }
-
-    hanging_node->parent = parent;
-
-    if (hanging_node == node->left)
-    { 
-        delete_node (node->right);
-    }
-    else if (hanging_node == node->right)
-    {
-        delete_node (node->left);
-    }
-
-    free (node);
-
-    ERR_RET (NULL);
-
-    return hanging_node;
-}
-
 NODE *add_simplific (NODE *node, int *code_error)
 {
     my_assert (node != NULL, ERR_PTR);
@@ -316,6 +281,41 @@ NODE *pow_simplific (NODE *node, int *code_error)
     return node;
 }
 
+NODE *hanging_tree (NODE *node, NODE *hanging_node, NODE *parent, int *code_error)
+{
+    my_assert (node != NULL, ERR_PTR);
+    my_assert (hanging_node != NULL, ERR_PTR);
+
+    if (parent != NULL)
+    {
+        if (parent->left == node)
+        {
+            parent->left = hanging_node;
+        }
+        else if (parent->right == node)
+        {
+            parent->right = hanging_node;
+        }
+    }
+
+    hanging_node->parent = parent;
+
+    if (hanging_node == node->left)
+    { 
+        delete_node (node->right);
+    }
+    else if (hanging_node == node->right)
+    {
+        delete_node (node->left);
+    }
+
+    free (node);
+
+    ERR_RET (NULL);
+
+    return hanging_node;
+}
+
 ELEMENT eval_tree (NODE *node, ELEMENT var_value, int *code_error)
 {
     IS_NODE_PTR_NULL (ERR_NO);
@@ -334,7 +334,7 @@ ELEMENT eval_tree (NODE *node, ELEMENT var_value, int *code_error)
         {
             return eval_node (node->data.types_op, 
                               eval_tree (node->left, var_value, code_error), 
-                              eval_tree (node->left, var_value, code_error), 
+                              eval_tree (node->right, var_value, code_error), 
                               code_error);
         }
         case (DEF_TYPE):
@@ -367,7 +367,7 @@ ELEMENT eval_node (int op, ELEMENT first_value, ELEMENT second_value, int *code_
         }
         case (DIV):
         {
-            if (!compare (second_value, 0))
+            if (!is_zero (second_value))
             {
                 return DEF_EVAL (/);
             }
