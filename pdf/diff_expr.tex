@@ -4,19 +4,18 @@
 \date{\today}
 \begin{document}
 \maketitle
-Function:\[f^{(0)}(x)=\sin((x^2) \cdot \cos(x))^2\]
-Function value at a point $x=2$: \[f(2)=0.991229\]
+Function:\[f^{(0)}(x)=\sin(15 \cdot x+7)^3+\cos(x^3-27)\]
+Function value at a point $x=2$: \[f(2)=0.722189\]
 Taylor decomposition:
 \[f(x)=f^{(0)}(x)+ \frac {1}{1!} \cdot f^{(1)}(x)+ \frac {1}{2!} \cdot f^{(2)}(x)+o(x^2)\]
 Substitutions for Taylor:
-\[f^{(0)}(x)=\sin((x^2) \cdot \cos(x))^2\]
-\[f^{(1)}(x)=2 \cdot \sin((x^2) \cdot \cos(x)) \cdot A\]
+\[f^{(0)}(x)=\sin(15 \cdot x+7)^3+\cos(x^3-27)\]
+\[f^{(1)}(x)=A+\sin(x^3-27) \cdot (-1) \cdot 3 \cdot x^2\]
 Substitutions:
-\[A=\cos((x^2) \cdot \cos(x)) \cdot (2 \cdot x \cdot \cos(x)+(x^2) \cdot \sin(x) \cdot (-1))\]
-\[f^{(2)}(x)=2 \cdot A \cdot B+2 \cdot \sin((x^2) \cdot \cos(x)) \cdot (C \cdot (2 \cdot x \cdot \cos(x)+(x^2) \cdot \sin(x) \cdot (-1))+\cos((x^2) \cdot \cos(x)) \cdot D)\]
+\[A=3 \cdot \sin(15 \cdot x+7)^2 \cdot \cos(15 \cdot x+7) \cdot 15\]
+\[f^{(2)}(x)=A \cdot \cos(15 \cdot x+7) \cdot 15+B+C+\sin(x^3-27) \cdot (-1) \cdot 3 \cdot 2 \cdot x\]
 Substitutions:
-\[A=\cos((x^2) \cdot \cos(x)) \cdot (2 \cdot x \cdot \cos(x)+(x^2) \cdot \sin(x) \cdot (-1))\]
-\[B=\cos((x^2) \cdot \cos(x)) \cdot (2 \cdot x \cdot \cos(x)+(x^2) \cdot \sin(x) \cdot (-1))\]
-\[C=\sin((x^2) \cdot \cos(x)) \cdot (-1) \cdot (2 \cdot x \cdot \cos(x)+(x^2) \cdot \sin(x) \cdot (-1))\]
-\[D=2 \cdot \cos(x)+2 \cdot x \cdot \sin(x) \cdot (-1)+2 \cdot x \cdot \sin(x) \cdot (-1)+(x^2) \cdot \cos(x) \cdot (-1)\]
+\[A=3 \cdot 2 \cdot \sin(15 \cdot x+7) \cdot \cos(15 \cdot x+7) \cdot 15\]
+\[B=3 \cdot \sin(15 \cdot x+7)^2 \cdot \sin(15 \cdot x+7) \cdot (-15) \cdot 15\]
+\[C=\cos(x^3-27) \cdot 3 \cdot x^2 \cdot (-1) \cdot 3 \cdot x^2\]
 \end{document}

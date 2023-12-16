@@ -298,7 +298,7 @@ bool print_bracket (NODE *node, NODE *node_side, FILE *stream, int *code_error)
     {
         if (node_side->type == OP)
         {
-            if (node_side->data.types_op == POW || node_side->data.types_op == ADD || node_side->data.types_op == SUB)
+            if (node_side->data.types_op == ADD || node_side->data.types_op == SUB)
             {
                 PRINT_NODE ("(");
                 return true;

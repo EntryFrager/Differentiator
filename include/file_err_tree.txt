@@ -68979,3 +68979,487 @@ tree[00A9FEA8] "tree" called from main.cpp(13) main
 --------------------------------------------------------------------------------------------------------
 
 
+--------------------------------------------------------------------------------------------------------
+tree[00A9FEA8] "tree" called from main.cpp(13) main
+{
+	is_init = 1
+	{
+		*node[02F736B8] = +;
+		*node[02F73640] =  \cdot ;
+		*node[02F73208] =  \cdot ;
+		*node[02F733C0] = 2;
+		*node[02F73488] =  \cdot ;
+		*node[02F731E0] = \cos;
+		*node[02F73550] = 1;
+		*node[02F73258] =  \cdot ;
+		*node[02F73578] = ^;
+		*node[02F73438] = x;
+		*node[02F730C8] = 2;
+		*node[02F73320] = \cos;
+		*node[02F73168] = 1;
+		*node[02F73460] = x;
+		*node[02F730F0] = +;
+		*node[02F73370] =  \cdot ;
+		*node[02F732A8] =  \cdot ;
+		*node[02F734D8] = 2;
+		*node[02F73528] = x;
+		*node[02F72B68] = \cos;
+		*node[02F72C08] = 1;
+		*node[02F72B90] = x;
+		*node[02F72B40] =  \cdot ;
+		*node[02F72A50] = ^;
+		*node[02F72AF0] = x;
+		*node[02F72AA0] = 2;
+		*node[02F72A28] =  \cdot ;
+		*node[02F72A00] = \sin;
+		*node[02F72AC8] = 1;
+		*node[02F729D8] = x;
+		*node[02F732D0] = -1;
+		*node[02F72F00] =  \cdot ;
+		*node[02F72E60] = \cos;
+		*node[02F72E88] = 1;
+		*node[02F72DE8] =  \cdot ;
+		*node[02F72E10] = ^;
+		*node[02F72ED8] = x;
+		*node[02F72F28] = 2;
+		*node[02F72F50] = \cos;
+		*node[02F72F78] = 1;
+		*node[02F72960] = x;
+		*node[02F72CA8] = +;
+		*node[02F72D70] =  \cdot ;
+		*node[02F729B0] =  \cdot ;
+		*node[02F72CD0] = 2;
+		*node[02F72CF8] = x;
+		*node[02F72C30] = \cos;
+		*node[02F72898] = 1;
+		*node[02F72A78] = x;
+		*node[02F72D20] =  \cdot ;
+		*node[02F72C58] = ^;
+		*node[02F72C80] = x;
+		*node[02F72D48] = 2;
+		*node[02F72988] =  \cdot ;
+		*node[02F728C0] = \sin;
+		*node[02F72BB8] = 1;
+		*node[02F72BE0] = x;
+		*node[02F728E8] = -1;
+		*node[02F72FA0] =  \cdot ;
+		*node[02F72838] =  \cdot ;
+		*node[02F72590] = 2;
+		*node[02F725B8] = \sin;
+		*node[02F72E38] = 1;
+		*node[02F72FF0] =  \cdot ;
+		*node[02F73018] = ^;
+		*node[02F72FC8] = x;
+		*node[02F72EB0] = 2;
+		*node[02F72D98] = \cos;
+		*node[02F72DC0] = 1;
+		*node[02F73040] = x;
+		*node[02F725E0] = +;
+		*node[02F72810] =  \cdot ;
+		*node[02F727C0] =  \cdot ;
+		*node[02F72658] = \sin;
+		*node[02F72630] = 1;
+		*node[02F72680] =  \cdot ;
+		*node[02F726A8] = ^;
+		*node[02F726F8] = x;
+		*node[02F72720] = 2;
+		*node[02F727E8] = \cos;
+		*node[02F72748] = 1;
+		*node[02F72798] = x;
+		*node[02F726D0] =  \cdot ;
+		*node[02F72770] = -1;
+		*node[02F72608] = +;
+		*node[02F722E8] =  \cdot ;
+		*node[02F72400] =  \cdot ;
+		*node[02F72180] = 2;
+		*node[02F72568] = x;
+		*node[02F72388] = \cos;
+		*node[02F72428] = 1;
+		*node[02F724C8] = x;
+		*node[02F721D0] =  \cdot ;
+		*node[02F720E0] = ^;
+		*node[02F721F8] = x;
+		*node[02F72338] = 2;
+		*node[02F723D8] =  \cdot ;
+		*node[02F72360] = \sin;
+		*node[02F724A0] = 1;
+		*node[02F72270] = x;
+		*node[02F737A8] = -1;
+		*node[02F71DD8] = +;
+		*node[02F71E00] =  \cdot ;
+		*node[02F71E78] =  \cdot ;
+		*node[02F71EC8] = 2;
+		*node[02F71EF0] = x;
+		*node[02F71EA0] = \cos;
+		*node[02F71F18] = 1;
+		*node[02F71F68] = x;
+		*node[02F71F40] =  \cdot ;
+		*node[02F72220] = ^;
+		*node[02F72478] = x;
+		*node[02F72130] = 2;
+		*node[02F72310] =  \cdot ;
+		*node[02F72518] = \sin;
+		*node[02F72450] = 1;
+		*node[02F72248] = x;
+		*node[02F72090] = -1;
+		*node[02F71FE0] =  \cdot ;
+		*node[02F71D60] = \cos;
+		*node[02F71E28] = 1;
+		*node[02F72030] =  \cdot ;
+		*node[02F72008] = ^;
+		*node[02F71F90] = x;
+		*node[02F71DB0] = 2;
+		*node[02F71D88] = \cos;
+		*node[02F71FB8] = 1;
+		*node[02F71E50] = x;
+		*node[02F71CC0] = +;
+		*node[02F71C98] = +;
+		*node[02F71C48] =  \cdot ;
+		*node[02F73708] = 2;
+		*node[02F71C20] = \cos;
+		*node[02F71AE0] = 1;
+		*node[02F71D38] = x;
+		*node[02F71A90] =  \cdot ;
+		*node[02F71A40] =  \cdot ;
+		*node[02F71CE8] = 2;
+		*node[02F719F0] = x;
+		*node[02F71C70] =  \cdot ;
+		*node[02F718B0] = \sin;
+		*node[02F71AB8] = 1;
+		*node[02F71888] = x;
+		*node[02F73780] = -1;
+		*node[02F71BD0] = +;
+		*node[02F71D10] =  \cdot ;
+		*node[02F71928] =  \cdot ;
+		*node[02F71A18] = 2;
+		*node[02F719A0] = x;
+		*node[02F71648] =  \cdot ;
+		*node[02F71670] = \sin;
+		*node[02F717D8] = 1;
+		*node[02F71698] = x;
+		*node[02F716C0] = -1;
+		*node[02F715F8] =  \cdot ;
+		*node[02F71710] = ^;
+		*node[02F71800] = x;
+		*node[02F715A8] = 2;
+		*node[02F71760] =  \cdot ;
+		*node[02F715D0] = \cos;
+		*node[02F71788] = 1;
+		*node[02F71580] = x;
+		*node[02F717B0] = -1;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[00A9FEA8] "tree" called from main.cpp(13) main
+{
+	is_init = 1
+	{
+		*node[02F816E8] = +;
+		*node[02F81760] =  \cdot ;
+		*node[02F81648] =  \cdot ;
+		*node[02F810D0] = 3;
+		*node[02F81120] = ^;
+		*node[02F814B8] = \sin;
+		*node[02F81468] = 1;
+		*node[02F81490] = +;
+		*node[02F814E0] =  \cdot ;
+		*node[02F81508] = 15;
+		*node[02F81558] = x;
+		*node[02F810A8] = 7;
+		*node[02F81788] = 2;
+		*node[02F81530] =  \cdot ;
+		*node[02F81328] = \cos;
+		*node[02F81260] = 1;
+		*node[02F81378] = +;
+		*node[02F81210] =  \cdot ;
+		*node[02F812B0] = 15;
+		*node[02F810F8] = x;
+		*node[02F81198] = 7;
+		*node[02F816C0] = 15;
+		*node[02F81350] =  \cdot ;
+		*node[02F81170] = \sin;
+		*node[02F811E8] = 1;
+		*node[014ED888] = -;
+		*node[014ED8B0] = ^;
+		*node[014ED950] = x;
+		*node[014ED8D8] = 3;
+		*node[014ED9A0] = 27;
+		*node[014ED7C0] =  \cdot ;
+		*node[014ED838] = -1;
+		*node[014ED720] =  \cdot ;
+		*node[014ED928] = 3;
+		*node[014ED900] = ^;
+		*node[014ED748] = x;
+		*node[02F817B0] = 2;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[00A9FEA8] "tree" called from main.cpp(13) main
+{
+	is_init = 1
+	{
+		*node[030410A8] = +;
+		*node[03041530] =  \cdot ;
+		*node[03041378] =  \cdot ;
+		*node[030412D8] = 3;
+		*node[03041328] = ^;
+		*node[030414B8] = \sin;
+		*node[03041210] = 1;
+		*node[030413A0] = +;
+		*node[03041198] =  \cdot ;
+		*node[03041558] = 15;
+		*node[03041120] = x;
+		*node[03041288] = 7;
+		*node[03041490] = 2;
+		*node[03041148] =  \cdot ;
+		*node[030412B0] = \cos;
+		*node[030415F8] = 1;
+		*node[03041788] = +;
+		*node[030417D8] =  \cdot ;
+		*node[03041580] = 15;
+		*node[030415A8] = x;
+		*node[030415D0] = 7;
+		*node[03041170] = 15;
+		*node[030416C0] =  \cdot ;
+		*node[03041620] = \sin;
+		*node[03041648] = 1;
+		*node[013DD770] = -;
+		*node[013DD900] = ^;
+		*node[013DD950] = x;
+		*node[013DD9A0] = 3;
+		*node[013DD9C8] = 27;
+		*node[013DD720] =  \cdot ;
+		*node[013DD6F8] = -1;
+		*node[013DD928] =  \cdot ;
+		*node[013DD748] = 3;
+		*node[013DD8B0] = ^;
+		*node[013DD888] = x;
+		*node[030411E8] = 2;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[00A9FEA8] "tree" called from main.cpp(13) main
+{
+	is_init = 1
+	{
+		*node[02FC2C08] = +;
+		*node[02FC2A00] = +;
+		*node[02FC2B90] =  \cdot ;
+		*node[02FC2CA8] =  \cdot ;
+		*node[02FC2C80] = 3;
+		*node[02FC2D70] =  \cdot ;
+		*node[02FC2910] =  \cdot ;
+		*node[02FC2CD0] = 2;
+		*node[02FC2BB8] = \sin;
+		*node[02FC29B0] = 1;
+		*node[02FC2B18] = +;
+		*node[02FC2AA0] =  \cdot ;
+		*node[02FC2C30] = 15;
+		*node[02FC2C58] = x;
+		*node[02FC2A78] = 7;
+		*node[02FC2DC0] =  \cdot ;
+		*node[02FC2E88] = \cos;
+		*node[02FC2E60] = 1;
+		*node[02FC2F78] = +;
+		*node[02FC3018] =  \cdot ;
+		*node[02FC2E38] = 15;
+		*node[02FC2FA0] = x;
+		*node[02FC2F28] = 7;
+		*node[02FC28E8] = 15;
+		*node[02FC27C0] =  \cdot ;
+		*node[02FC27E8] = \cos;
+		*node[02FC26A8] = 1;
+		*node[02FC2810] = +;
+		*node[02FC25E0] =  \cdot ;
+		*node[02FC2608] = 15;
+		*node[02FC2590] = x;
+		*node[02FC2630] = 7;
+		*node[02FC25B8] = 15;
+		*node[02FC2720] =  \cdot ;
+		*node[02FC2180] =  \cdot ;
+		*node[02FC2220] = 3;
+		*node[02FC2248] = ^;
+		*node[02FC2428] = \sin;
+		*node[02FC26D0] = 1;
+		*node[02FC26F8] = +;
+		*node[02FC2748] =  \cdot ;
+		*node[02FC2770] = 15;
+		*node[02FC2658] = x;
+		*node[02FC2798] = 7;
+		*node[02FC2838] = 2;
+		*node[02FC23B0] =  \cdot ;
+		*node[02FC2388] =  \cdot ;
+		*node[02FC2518] = \sin;
+		*node[02FC21F8] = 1;
+		*node[02FC2360] = +;
+		*node[02FC22E8] =  \cdot ;
+		*node[02FC2310] = 15;
+		*node[02FC21D0] = x;
+		*node[02FC24F0] = 7;
+		*node[02FC2A28] = -15;
+		*node[02FC23D8] = 15;
+		*node[02FC1950] = +;
+		*node[02FC1928] =  \cdot ;
+		*node[02FC1B58] =  \cdot ;
+		*node[02FC1C98] = \cos;
+		*node[02FC1D38] = 1;
+		*node[02FC1A68] = -;
+		*node[02FC1C70] = ^;
+		*node[02FC1CE8] = x;
+		*node[02FC1B08] = 3;
+		*node[02FC1B80] = 27;
+		*node[02FC1A90] =  \cdot ;
+		*node[02FC1BA8] = 3;
+		*node[02FC1B30] = ^;
+		*node[02FC1D60] = x;
+		*node[02FC2B40] = 2;
+		*node[02FC1BD0] =  \cdot ;
+		*node[02FC1AE0] = -1;
+		*node[02FC18B0] =  \cdot ;
+		*node[02FC1AB8] = 3;
+		*node[02FC1CC0] = ^;
+		*node[02FC1A18] = x;
+		*node[02FC1900] = 2;
+		*node[02FC18D8] =  \cdot ;
+		*node[02FC1F18] = \sin;
+		*node[02FC1DB0] = 1;
+		*node[02FC1E00] = -;
+		*node[02FC1E28] = ^;
+		*node[02FC1EA0] = x;
+		*node[02FC1FB8] = 3;
+		*node[02FC1E50] = 27;
+		*node[02FC2008] =  \cdot ;
+		*node[02FC1DD8] = -1;
+		*node[02FC15F8] =  \cdot ;
+		*node[02FC17D8] = 3;
+		*node[02FC1698] =  \cdot ;
+		*node[02FC1788] = 2;
+		*node[02FC1670] = x;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[00A9FEA8] "tree" called from main.cpp(13) main
+{
+	is_init = 1
+	{
+		*node[02F819C8] = 0;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------
+tree[00A9FEA8] "tree" called from main.cpp(13) main
+{
+	is_init = 1
+	{
+		*node[02F92F28] = +;
+		*node[02F92E38] = +;
+		*node[02F93040] =  \cdot ;
+		*node[02F92C80] =  \cdot ;
+		*node[02F92C30] = 3;
+		*node[02F92C08] =  \cdot ;
+		*node[02F92AA0] =  \cdot ;
+		*node[02F92A78] = 2;
+		*node[02F92BE0] = \sin;
+		*node[02F92B68] = 1;
+		*node[02F92A00] = +;
+		*node[02F928C0] =  \cdot ;
+		*node[02F92910] = 15;
+		*node[02F929D8] = x;
+		*node[02F92960] = 7;
+		*node[02F928E8] =  \cdot ;
+		*node[02F92D70] = \cos;
+		*node[02F92B40] = 1;
+		*node[02F92CF8] = +;
+		*node[02F92B18] =  \cdot ;
+		*node[02F92B90] = 15;
+		*node[02F92BB8] = x;
+		*node[02F92D48] = 7;
+		*node[02F92AF0] = 15;
+		*node[02F92130] =  \cdot ;
+		*node[02F92310] = \cos;
+		*node[02F92360] = 1;
+		*node[02F92388] = +;
+		*node[02F92400] =  \cdot ;
+		*node[02F92428] = 15;
+		*node[02F924A0] = x;
+		*node[02F924C8] = 7;
+		*node[02F924F0] = 15;
+		*node[02F92248] =  \cdot ;
+		*node[02F923D8] =  \cdot ;
+		*node[02F92338] = 3;
+		*node[02F92270] = ^;
+		*node[02F922C0] = \sin;
+		*node[02F92540] = 1;
+		*node[02F922E8] = +;
+		*node[02F92518] =  \cdot ;
+		*node[02F92568] = 15;
+		*node[02F92298] = x;
+		*node[02F92478] = 7;
+		*node[02F92108] = 2;
+		*node[02F921A8] =  \cdot ;
+		*node[02F92180] =  \cdot ;
+		*node[02F920E0] = \sin;
+		*node[02F921D0] = 1;
+		*node[02F923B0] = +;
+		*node[02F92158] =  \cdot ;
+		*node[02F92220] = 15;
+		*node[02F92450] = x;
+		*node[02F920B8] = 7;
+		*node[02F92DE8] = -15;
+		*node[02F92798] = 15;
+		*node[02F91BF8] = +;
+		*node[02F91BA8] =  \cdot ;
+		*node[02F91B80] =  \cdot ;
+		*node[02F91B58] = \cos;
+		*node[02F91B30] = 1;
+		*node[02F919C8] = -;
+		*node[02F91A68] = ^;
+		*node[02F91AE0] = x;
+		*node[02F91AB8] = 3;
+		*node[02F91B08] = 27;
+		*node[02F91978] =  \cdot ;
+		*node[02F918D8] = 3;
+		*node[02F918B0] = ^;
+		*node[02F91D10] = x;
+		*node[02F92F78] = 2;
+		*node[02F919F0] =  \cdot ;
+		*node[02F91888] = -1;
+		*node[02F91C98] =  \cdot ;
+		*node[02F91D60] = 3;
+		*node[02F91900] = ^;
+		*node[02F919A0] = x;
+		*node[02F91CC0] = 2;
+		*node[02F91A18] =  \cdot ;
+		*node[02F91FB8] = \sin;
+		*node[02F91E78] = 1;
+		*node[02F92008] = -;
+		*node[02F91EA0] = ^;
+		*node[02F91F68] = x;
+		*node[02F92030] = 3;
+		*node[02F91DB0] = 27;
+		*node[02F91F90] =  \cdot ;
+		*node[02F91EF0] = -1;
+		*node[02F911E8] =  \cdot ;
+		*node[02F911C0] = 3;
+		*node[02F91328] =  \cdot ;
+		*node[02F91300] = 2;
+		*node[02F91080] = x;
+	}
+}
+--------------------------------------------------------------------------------------------------------
+
+
